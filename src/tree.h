@@ -17,7 +17,7 @@ enum NodeType
 
 enum OperatorType
 {
-    OP_EQ,  // ==
+    OP_EQ,  // =
 };
 
 enum StmtType {
