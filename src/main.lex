@@ -45,6 +45,15 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
     return CHAR;
 }
 
+{STRING} {
+    TreeNode* node=new TreeNode(lineno,NODE_CONST);
+    node->type=TYPE_STRING;
+    node->str_val=yytext+1;
+    //TODO node->str_val.pop_back();
+    yylval=node;
+    return STRING;
+}
+
 {IDENTIFIER} {
     TreeNode* node = new TreeNode(lineno, NODE_VAR);
     node->var_name = string(yytext);

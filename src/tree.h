@@ -13,23 +13,43 @@ enum NodeType
 
     NODE_STMT,
     NODE_PROG,
+    NODE_COMP,
 };
 
 enum OperatorType
 {
     OP_EQ,  // =
+    OP_NEG, // -
+    OP_NOT, //
+    OP_ADD, // +
+    OP_SUB, // -
+    OP_MUL, // *
+    OP_DIV, // /
+    OP_MOD, // %
+    OP_OR,  // ||
+    OP_AND, // &&
+    OP_LT,  // <
+    OP_BT,  // >
+    OP_LTEQ,// <=
+    OP_BTEQ,// >=
+    OP_NQ,  // !=
+    OP_ASSG,// = 
+    OP_INC, // ++
+    OP_DEC, // --
 };
 
 enum StmtType {
     STMT_SKIP,
     STMT_DECL,
+    STMT_ASSG,
+    
 }
 ;
 
 struct TreeNode {
 public:
     int nodeID;  // 用于作业的序号输出
-    int lineno;
+    int lineno; 
     NodeType nodeType;
 
     TreeNode* child = nullptr;
