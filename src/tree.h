@@ -10,7 +10,6 @@ enum NodeType
     NODE_VAR,
     NODE_EXPR,
     NODE_TYPE,
-
     NODE_STMT,
     NODE_PROG,
     NODE_COMP,
@@ -19,7 +18,6 @@ enum NodeType
 enum OperatorType
 {
     OP_EQ,  // =
-    OP_NEG, // -
     OP_NOT, //
     OP_ADD, // +
     OP_SUB, // -
@@ -29,20 +27,30 @@ enum OperatorType
     OP_OR,  // ||
     OP_AND, // &&
     OP_LT,  // <
-    OP_BT,  // >
-    OP_LTEQ,// <=
-    OP_BTEQ,// >=
-    OP_NQ,  // !=
+    OP_GT,  // >
+    OP_LE,// <=
+    OP_GE,// >=
+    OP_NEQ,  // !=
     OP_ASSG,// = 
     OP_INC, // ++
     OP_DEC, // --
+    OP_MINUS, //-
+    OP_NULL
 };
 
 enum StmtType {
     STMT_SKIP,
     STMT_DECL,
-    STMT_ASSG,
-    
+    STMT_ASSIGN,
+    STMT_RETURN,
+    STMT_IFELSE,
+    STMT_WHILE,
+    STMT_FOR,
+    STMT_CONTINUE,
+    STMT_BREAK,
+    STMT_MAIN,
+    STMT_SCANF,
+    STMT_PRINTF,
 }
 ;
 

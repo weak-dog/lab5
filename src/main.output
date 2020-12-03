@@ -1,0 +1,1692 @@
+终端机在文法中未使用
+
+    COMMA
+    BOOL
+    STRING
+
+
+状态 43 冲突：13 项偏移/归约
+状态 98 冲突：14 项偏移/归约
+状态 99 冲突：13 项偏移/归约
+状态 103 冲突：13 项偏移/归约
+状态 106 冲突：13 项偏移/归约
+
+
+语法
+
+    0 $accept: program $end
+
+    1 program: statements
+
+    2 statements: statement
+    3           | MAIN statements
+    4           | LBRACE statements RBRACE
+    5           | statements statement
+
+    6 statement: SEMICOLON
+    7          | declaration
+    8          | IF LBRACKET bool_expr RBRACKET statements ELSE statements
+    9          | IF LBRACKET bool_expr RBRACKET statements
+   10          | WHILE LBRACKET bool_expr RBRACKET statements
+   11          | BREAK
+   12          | CONTINUE
+   13          | RETURN expr
+   14          | FOR LBRACKET declaration SEMICOLON expr SEMICOLON expr RBRACKET statements
+   15          | IOFUNC
+
+   16 IOFUNC: PRINTF RBRACKET expr LBRACKET
+   17       | SCANF RBRACKET expr LBRACKET
+
+   18 declaration: T IDENTIFIER
+   19            | T IDENTIFIER ASSIGN expr
+   20            | IDENTIFIER ASSIGN expr
+
+   21 expr: addsub_expr
+   22     | bool_expr
+
+   23 addsub_expr: mdm_expr
+   24            | addsub_expr ADD mdm_expr
+   25            | addsub_expr SUB mdm_expr
+
+   26 mdm_expr: unary_expr
+   27         | mdm_expr MUL unary_expr
+   28         | mdm_expr DIV unary_expr
+   29         | mdm_expr MOD unary_expr
+
+   30 unary_expr: MINUS unary_expr
+   31           | IDENTIFIER
+   32           | INTEGER
+   33           | CHAR
+   34           | LBRACKET expr RBRACKET
+   35           | INC IDENTIFIER
+   36           | IDENTIFIER INC
+   37           | DEC IDENTIFIER
+   38           | IDENTIFIER DEC
+
+   39 bool_expr: TRUE
+   40          | FALSE
+   41          | NOT bool_expr
+   42          | logic_expr
+   43          | bool_expr AND logic_expr
+   44          | bool_expr OR logic_expr
+
+   45 logic_expr: addsub_expr LT addsub_expr
+   46           | addsub_expr GT addsub_expr
+   47           | addsub_expr LE addsub_expr
+   48           | addsub_expr GE addsub_expr
+   49           | addsub_expr EQ addsub_expr
+   50           | addsub_expr NEQ addsub_expr
+
+   51 T: T_INT
+   52  | T_CHAR
+   53  | T_BOOL
+
+
+终结语词，附有它们出现处的规则
+
+    $end (0) 0
+    error (256)
+    T_CHAR (258) 52
+    T_INT (259) 51
+    T_BOOL (260) 53
+    SEMICOLON (261) 6 14
+    COMMA (262)
+    IF (263) 8 9
+    ELSE (264) 8
+    WHILE (265) 10
+    FOR (266) 14
+    RETURN (267) 13
+    CONTINUE (268) 12
+    BREAK (269) 11
+    SCANF (270) 17
+    PRINTF (271) 16
+    MAIN (272) 3
+    LBRACKET (273) 8 9 10 14 16 17 34
+    RBRACKET (274) 8 9 10 14 16 17 34
+    LBRACE (275) 4
+    RBRACE (276) 4
+    IDENTIFIER (277) 18 19 20 31 35 36 37 38
+    INTEGER (278) 32
+    CHAR (279) 33
+    BOOL (280)
+    STRING (281)
+    TRUE (282) 39
+    FALSE (283) 40
+    ASSIGN (284) 19 20
+    AND (285) 43
+    OR (286) 44
+    NOT (287) 41
+    LT (288) 45
+    GT (289) 46
+    LE (290) 47
+    GE (291) 48
+    EQ (292) 49
+    NEQ (293) 50
+    ADD (294) 24
+    SUB (295) 25
+    MUL (296) 27
+    DIV (297) 28
+    MOD (298) 29
+    INC (299) 35 36
+    DEC (300) 37 38
+    MINUS (301) 30
+
+
+非终结语词，附有它们出现处的规则
+
+    $accept (47)
+        on left: 0
+    program (48)
+        on left: 1
+        on right: 0
+    statements (49)
+        on left: 2 3 4 5
+        on right: 1 3 4 5 8 9 10 14
+    statement (50)
+        on left: 6 7 8 9 10 11 12 13 14 15
+        on right: 2 5
+    IOFUNC (51)
+        on left: 16 17
+        on right: 15
+    declaration (52)
+        on left: 18 19 20
+        on right: 7 14
+    expr (53)
+        on left: 21 22
+        on right: 13 14 16 17 19 20 34
+    addsub_expr (54)
+        on left: 23 24 25
+        on right: 21 24 25 45 46 47 48 49 50
+    mdm_expr (55)
+        on left: 26 27 28 29
+        on right: 23 24 25 27 28 29
+    unary_expr (56)
+        on left: 30 31 32 33 34 35 36 37 38
+        on right: 26 27 28 29 30
+    bool_expr (57)
+        on left: 39 40 41 42 43 44
+        on right: 8 9 10 22 41 43 44
+    logic_expr (58)
+        on left: 45 46 47 48 49 50
+        on right: 42 43 44
+    T (59)
+        on left: 51 52 53
+        on right: 18 19
+
+
+状态 0
+
+    0 $accept: . program $end
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    program      转到状态 16
+    statements   转到状态 17
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 1
+
+   52 T: T_CHAR .
+
+    $default  使用规则 52 以归约 (T)
+
+
+状态 2
+
+   51 T: T_INT .
+
+    $default  使用规则 51 以归约 (T)
+
+
+状态 3
+
+   53 T: T_BOOL .
+
+    $default  使用规则 53 以归约 (T)
+
+
+状态 4
+
+    6 statement: SEMICOLON .
+
+    $default  使用规则 6 以归约 (statement)
+
+
+状态 5
+
+    8 statement: IF . LBRACKET bool_expr RBRACKET statements ELSE statements
+    9          | IF . LBRACKET bool_expr RBRACKET statements
+
+    LBRACKET  偏移，并进入状态 22
+
+
+状态 6
+
+   10 statement: WHILE . LBRACKET bool_expr RBRACKET statements
+
+    LBRACKET  偏移，并进入状态 23
+
+
+状态 7
+
+   14 statement: FOR . LBRACKET declaration SEMICOLON expr SEMICOLON expr RBRACKET statements
+
+    LBRACKET  偏移，并进入状态 24
+
+
+状态 8
+
+   13 statement: RETURN . expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 35
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 9
+
+   12 statement: CONTINUE .
+
+    $default  使用规则 12 以归约 (statement)
+
+
+状态 10
+
+   11 statement: BREAK .
+
+    $default  使用规则 11 以归约 (statement)
+
+
+状态 11
+
+   17 IOFUNC: SCANF . RBRACKET expr LBRACKET
+
+    RBRACKET  偏移，并进入状态 41
+
+
+状态 12
+
+   16 IOFUNC: PRINTF . RBRACKET expr LBRACKET
+
+    RBRACKET  偏移，并进入状态 42
+
+
+状态 13
+
+    3 statements: MAIN . statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 43
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 14
+
+    4 statements: LBRACE . statements RBRACE
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 44
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 15
+
+   20 declaration: IDENTIFIER . ASSIGN expr
+
+    ASSIGN  偏移，并进入状态 45
+
+
+状态 16
+
+    0 $accept: program . $end
+
+    $end  偏移，并进入状态 46
+
+
+状态 17
+
+    1 program: statements .
+    5 statements: statements . statement
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    $default  使用规则 1 以归约 (program)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 18
+
+    2 statements: statement .
+
+    $default  使用规则 2 以归约 (statements)
+
+
+状态 19
+
+   15 statement: IOFUNC .
+
+    $default  使用规则 15 以归约 (statement)
+
+
+状态 20
+
+    7 statement: declaration .
+
+    $default  使用规则 7 以归约 (statement)
+
+
+状态 21
+
+   18 declaration: T . IDENTIFIER
+   19            | T . IDENTIFIER ASSIGN expr
+
+    IDENTIFIER  偏移，并进入状态 48
+
+
+状态 22
+
+    8 statement: IF LBRACKET . bool_expr RBRACKET statements ELSE statements
+    9          | IF LBRACKET . bool_expr RBRACKET statements
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 49
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 50
+    logic_expr   转到状态 40
+
+
+状态 23
+
+   10 statement: WHILE LBRACKET . bool_expr RBRACKET statements
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 49
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 51
+    logic_expr   转到状态 40
+
+
+状态 24
+
+   14 statement: FOR LBRACKET . declaration SEMICOLON expr SEMICOLON expr RBRACKET statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    IDENTIFIER  偏移，并进入状态 15
+
+    declaration  转到状态 52
+    T            转到状态 21
+
+
+状态 25
+
+   34 unary_expr: LBRACKET . expr RBRACKET
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 53
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 26
+
+   31 unary_expr: IDENTIFIER .
+   36           | IDENTIFIER . INC
+   38           | IDENTIFIER . DEC
+
+    INC  偏移，并进入状态 54
+    DEC  偏移，并进入状态 55
+
+    $default  使用规则 31 以归约 (unary_expr)
+
+
+状态 27
+
+   32 unary_expr: INTEGER .
+
+    $default  使用规则 32 以归约 (unary_expr)
+
+
+状态 28
+
+   33 unary_expr: CHAR .
+
+    $default  使用规则 33 以归约 (unary_expr)
+
+
+状态 29
+
+   39 bool_expr: TRUE .
+
+    $default  使用规则 39 以归约 (bool_expr)
+
+
+状态 30
+
+   40 bool_expr: FALSE .
+
+    $default  使用规则 40 以归约 (bool_expr)
+
+
+状态 31
+
+   41 bool_expr: NOT . bool_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 49
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 56
+    logic_expr   转到状态 40
+
+
+状态 32
+
+   35 unary_expr: INC . IDENTIFIER
+
+    IDENTIFIER  偏移，并进入状态 57
+
+
+状态 33
+
+   37 unary_expr: DEC . IDENTIFIER
+
+    IDENTIFIER  偏移，并进入状态 58
+
+
+状态 34
+
+   30 unary_expr: MINUS . unary_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    unary_expr  转到状态 59
+
+
+状态 35
+
+   13 statement: RETURN expr .
+
+    $default  使用规则 13 以归约 (statement)
+
+
+状态 36
+
+   21 expr: addsub_expr .
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   45 logic_expr: addsub_expr . LT addsub_expr
+   46           | addsub_expr . GT addsub_expr
+   47           | addsub_expr . LE addsub_expr
+   48           | addsub_expr . GE addsub_expr
+   49           | addsub_expr . EQ addsub_expr
+   50           | addsub_expr . NEQ addsub_expr
+
+    LT   偏移，并进入状态 60
+    GT   偏移，并进入状态 61
+    LE   偏移，并进入状态 62
+    GE   偏移，并进入状态 63
+    EQ   偏移，并进入状态 64
+    NEQ  偏移，并进入状态 65
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 21 以归约 (expr)
+
+
+状态 37
+
+   23 addsub_expr: mdm_expr .
+   27 mdm_expr: mdm_expr . MUL unary_expr
+   28         | mdm_expr . DIV unary_expr
+   29         | mdm_expr . MOD unary_expr
+
+    MUL  偏移，并进入状态 68
+    DIV  偏移，并进入状态 69
+    MOD  偏移，并进入状态 70
+
+    $default  使用规则 23 以归约 (addsub_expr)
+
+
+状态 38
+
+   26 mdm_expr: unary_expr .
+
+    $default  使用规则 26 以归约 (mdm_expr)
+
+
+状态 39
+
+   22 expr: bool_expr .
+   43 bool_expr: bool_expr . AND logic_expr
+   44          | bool_expr . OR logic_expr
+
+    AND  偏移，并进入状态 71
+    OR   偏移，并进入状态 72
+
+    $default  使用规则 22 以归约 (expr)
+
+
+状态 40
+
+   42 bool_expr: logic_expr .
+
+    $default  使用规则 42 以归约 (bool_expr)
+
+
+状态 41
+
+   17 IOFUNC: SCANF RBRACKET . expr LBRACKET
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 73
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 42
+
+   16 IOFUNC: PRINTF RBRACKET . expr LBRACKET
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 74
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 43
+
+    3 statements: MAIN statements .
+    5           | statements . statement
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    T_CHAR      [使用规则 3 以归约 (statements)]
+    T_INT       [使用规则 3 以归约 (statements)]
+    T_BOOL      [使用规则 3 以归约 (statements)]
+    SEMICOLON   [使用规则 3 以归约 (statements)]
+    IF          [使用规则 3 以归约 (statements)]
+    WHILE       [使用规则 3 以归约 (statements)]
+    FOR         [使用规则 3 以归约 (statements)]
+    RETURN      [使用规则 3 以归约 (statements)]
+    CONTINUE    [使用规则 3 以归约 (statements)]
+    BREAK       [使用规则 3 以归约 (statements)]
+    SCANF       [使用规则 3 以归约 (statements)]
+    PRINTF      [使用规则 3 以归约 (statements)]
+    IDENTIFIER  [使用规则 3 以归约 (statements)]
+    $default    使用规则 3 以归约 (statements)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 44
+
+    4 statements: LBRACE statements . RBRACE
+    5           | statements . statement
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    RBRACE      偏移，并进入状态 75
+    IDENTIFIER  偏移，并进入状态 15
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 45
+
+   20 declaration: IDENTIFIER ASSIGN . expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 76
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 46
+
+    0 $accept: program $end .
+
+    $default  接受
+
+
+状态 47
+
+    5 statements: statements statement .
+
+    $default  使用规则 5 以归约 (statements)
+
+
+状态 48
+
+   18 declaration: T IDENTIFIER .
+   19            | T IDENTIFIER . ASSIGN expr
+
+    ASSIGN  偏移，并进入状态 77
+
+    $default  使用规则 18 以归约 (declaration)
+
+
+状态 49
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   45 logic_expr: addsub_expr . LT addsub_expr
+   46           | addsub_expr . GT addsub_expr
+   47           | addsub_expr . LE addsub_expr
+   48           | addsub_expr . GE addsub_expr
+   49           | addsub_expr . EQ addsub_expr
+   50           | addsub_expr . NEQ addsub_expr
+
+    LT   偏移，并进入状态 60
+    GT   偏移，并进入状态 61
+    LE   偏移，并进入状态 62
+    GE   偏移，并进入状态 63
+    EQ   偏移，并进入状态 64
+    NEQ  偏移，并进入状态 65
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+
+状态 50
+
+    8 statement: IF LBRACKET bool_expr . RBRACKET statements ELSE statements
+    9          | IF LBRACKET bool_expr . RBRACKET statements
+   43 bool_expr: bool_expr . AND logic_expr
+   44          | bool_expr . OR logic_expr
+
+    RBRACKET  偏移，并进入状态 78
+    AND       偏移，并进入状态 71
+    OR        偏移，并进入状态 72
+
+
+状态 51
+
+   10 statement: WHILE LBRACKET bool_expr . RBRACKET statements
+   43 bool_expr: bool_expr . AND logic_expr
+   44          | bool_expr . OR logic_expr
+
+    RBRACKET  偏移，并进入状态 79
+    AND       偏移，并进入状态 71
+    OR        偏移，并进入状态 72
+
+
+状态 52
+
+   14 statement: FOR LBRACKET declaration . SEMICOLON expr SEMICOLON expr RBRACKET statements
+
+    SEMICOLON  偏移，并进入状态 80
+
+
+状态 53
+
+   34 unary_expr: LBRACKET expr . RBRACKET
+
+    RBRACKET  偏移，并进入状态 81
+
+
+状态 54
+
+   36 unary_expr: IDENTIFIER INC .
+
+    $default  使用规则 36 以归约 (unary_expr)
+
+
+状态 55
+
+   38 unary_expr: IDENTIFIER DEC .
+
+    $default  使用规则 38 以归约 (unary_expr)
+
+
+状态 56
+
+   41 bool_expr: NOT bool_expr .
+   43          | bool_expr . AND logic_expr
+   44          | bool_expr . OR logic_expr
+
+    $default  使用规则 41 以归约 (bool_expr)
+
+
+状态 57
+
+   35 unary_expr: INC IDENTIFIER .
+
+    $default  使用规则 35 以归约 (unary_expr)
+
+
+状态 58
+
+   37 unary_expr: DEC IDENTIFIER .
+
+    $default  使用规则 37 以归约 (unary_expr)
+
+
+状态 59
+
+   30 unary_expr: MINUS unary_expr .
+
+    $default  使用规则 30 以归约 (unary_expr)
+
+
+状态 60
+
+   45 logic_expr: addsub_expr LT . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 82
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 61
+
+   46 logic_expr: addsub_expr GT . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 83
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 62
+
+   47 logic_expr: addsub_expr LE . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 84
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 63
+
+   48 logic_expr: addsub_expr GE . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 85
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 64
+
+   49 logic_expr: addsub_expr EQ . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 86
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 65
+
+   50 logic_expr: addsub_expr NEQ . addsub_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 87
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+
+
+状态 66
+
+   24 addsub_expr: addsub_expr ADD . mdm_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    mdm_expr    转到状态 88
+    unary_expr  转到状态 38
+
+
+状态 67
+
+   25 addsub_expr: addsub_expr SUB . mdm_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    mdm_expr    转到状态 89
+    unary_expr  转到状态 38
+
+
+状态 68
+
+   27 mdm_expr: mdm_expr MUL . unary_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    unary_expr  转到状态 90
+
+
+状态 69
+
+   28 mdm_expr: mdm_expr DIV . unary_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    unary_expr  转到状态 91
+
+
+状态 70
+
+   29 mdm_expr: mdm_expr MOD . unary_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    unary_expr  转到状态 92
+
+
+状态 71
+
+   43 bool_expr: bool_expr AND . logic_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 49
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    logic_expr   转到状态 93
+
+
+状态 72
+
+   44 bool_expr: bool_expr OR . logic_expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    addsub_expr  转到状态 49
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    logic_expr   转到状态 94
+
+
+状态 73
+
+   17 IOFUNC: SCANF RBRACKET expr . LBRACKET
+
+    LBRACKET  偏移，并进入状态 95
+
+
+状态 74
+
+   16 IOFUNC: PRINTF RBRACKET expr . LBRACKET
+
+    LBRACKET  偏移，并进入状态 96
+
+
+状态 75
+
+    4 statements: LBRACE statements RBRACE .
+
+    $default  使用规则 4 以归约 (statements)
+
+
+状态 76
+
+   20 declaration: IDENTIFIER ASSIGN expr .
+
+    $default  使用规则 20 以归约 (declaration)
+
+
+状态 77
+
+   19 declaration: T IDENTIFIER ASSIGN . expr
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 97
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 78
+
+    8 statement: IF LBRACKET bool_expr RBRACKET . statements ELSE statements
+    9          | IF LBRACKET bool_expr RBRACKET . statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 98
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 79
+
+   10 statement: WHILE LBRACKET bool_expr RBRACKET . statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 99
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 80
+
+   14 statement: FOR LBRACKET declaration SEMICOLON . expr SEMICOLON expr RBRACKET statements
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 100
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 81
+
+   34 unary_expr: LBRACKET expr RBRACKET .
+
+    $default  使用规则 34 以归约 (unary_expr)
+
+
+状态 82
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   45 logic_expr: addsub_expr LT addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 45 以归约 (logic_expr)
+
+
+状态 83
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   46 logic_expr: addsub_expr GT addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 46 以归约 (logic_expr)
+
+
+状态 84
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   47 logic_expr: addsub_expr LE addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 47 以归约 (logic_expr)
+
+
+状态 85
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   48 logic_expr: addsub_expr GE addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 48 以归约 (logic_expr)
+
+
+状态 86
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   49 logic_expr: addsub_expr EQ addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 49 以归约 (logic_expr)
+
+
+状态 87
+
+   24 addsub_expr: addsub_expr . ADD mdm_expr
+   25            | addsub_expr . SUB mdm_expr
+   50 logic_expr: addsub_expr NEQ addsub_expr .
+
+    ADD  偏移，并进入状态 66
+    SUB  偏移，并进入状态 67
+
+    $default  使用规则 50 以归约 (logic_expr)
+
+
+状态 88
+
+   24 addsub_expr: addsub_expr ADD mdm_expr .
+   27 mdm_expr: mdm_expr . MUL unary_expr
+   28         | mdm_expr . DIV unary_expr
+   29         | mdm_expr . MOD unary_expr
+
+    MUL  偏移，并进入状态 68
+    DIV  偏移，并进入状态 69
+    MOD  偏移，并进入状态 70
+
+    $default  使用规则 24 以归约 (addsub_expr)
+
+
+状态 89
+
+   25 addsub_expr: addsub_expr SUB mdm_expr .
+   27 mdm_expr: mdm_expr . MUL unary_expr
+   28         | mdm_expr . DIV unary_expr
+   29         | mdm_expr . MOD unary_expr
+
+    MUL  偏移，并进入状态 68
+    DIV  偏移，并进入状态 69
+    MOD  偏移，并进入状态 70
+
+    $default  使用规则 25 以归约 (addsub_expr)
+
+
+状态 90
+
+   27 mdm_expr: mdm_expr MUL unary_expr .
+
+    $default  使用规则 27 以归约 (mdm_expr)
+
+
+状态 91
+
+   28 mdm_expr: mdm_expr DIV unary_expr .
+
+    $default  使用规则 28 以归约 (mdm_expr)
+
+
+状态 92
+
+   29 mdm_expr: mdm_expr MOD unary_expr .
+
+    $default  使用规则 29 以归约 (mdm_expr)
+
+
+状态 93
+
+   43 bool_expr: bool_expr AND logic_expr .
+
+    $default  使用规则 43 以归约 (bool_expr)
+
+
+状态 94
+
+   44 bool_expr: bool_expr OR logic_expr .
+
+    $default  使用规则 44 以归约 (bool_expr)
+
+
+状态 95
+
+   17 IOFUNC: SCANF RBRACKET expr LBRACKET .
+
+    $default  使用规则 17 以归约 (IOFUNC)
+
+
+状态 96
+
+   16 IOFUNC: PRINTF RBRACKET expr LBRACKET .
+
+    $default  使用规则 16 以归约 (IOFUNC)
+
+
+状态 97
+
+   19 declaration: T IDENTIFIER ASSIGN expr .
+
+    $default  使用规则 19 以归约 (declaration)
+
+
+状态 98
+
+    5 statements: statements . statement
+    8 statement: IF LBRACKET bool_expr RBRACKET statements . ELSE statements
+    9          | IF LBRACKET bool_expr RBRACKET statements .
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    ELSE        偏移，并进入状态 101
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    T_CHAR      [使用规则 9 以归约 (statement)]
+    T_INT       [使用规则 9 以归约 (statement)]
+    T_BOOL      [使用规则 9 以归约 (statement)]
+    SEMICOLON   [使用规则 9 以归约 (statement)]
+    IF          [使用规则 9 以归约 (statement)]
+    ELSE        [使用规则 9 以归约 (statement)]
+    WHILE       [使用规则 9 以归约 (statement)]
+    FOR         [使用规则 9 以归约 (statement)]
+    RETURN      [使用规则 9 以归约 (statement)]
+    CONTINUE    [使用规则 9 以归约 (statement)]
+    BREAK       [使用规则 9 以归约 (statement)]
+    SCANF       [使用规则 9 以归约 (statement)]
+    PRINTF      [使用规则 9 以归约 (statement)]
+    IDENTIFIER  [使用规则 9 以归约 (statement)]
+    $default    使用规则 9 以归约 (statement)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 99
+
+    5 statements: statements . statement
+   10 statement: WHILE LBRACKET bool_expr RBRACKET statements .
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    T_CHAR      [使用规则 10 以归约 (statement)]
+    T_INT       [使用规则 10 以归约 (statement)]
+    T_BOOL      [使用规则 10 以归约 (statement)]
+    SEMICOLON   [使用规则 10 以归约 (statement)]
+    IF          [使用规则 10 以归约 (statement)]
+    WHILE       [使用规则 10 以归约 (statement)]
+    FOR         [使用规则 10 以归约 (statement)]
+    RETURN      [使用规则 10 以归约 (statement)]
+    CONTINUE    [使用规则 10 以归约 (statement)]
+    BREAK       [使用规则 10 以归约 (statement)]
+    SCANF       [使用规则 10 以归约 (statement)]
+    PRINTF      [使用规则 10 以归约 (statement)]
+    IDENTIFIER  [使用规则 10 以归约 (statement)]
+    $default    使用规则 10 以归约 (statement)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 100
+
+   14 statement: FOR LBRACKET declaration SEMICOLON expr . SEMICOLON expr RBRACKET statements
+
+    SEMICOLON  偏移，并进入状态 102
+
+
+状态 101
+
+    8 statement: IF LBRACKET bool_expr RBRACKET statements ELSE . statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 103
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 102
+
+   14 statement: FOR LBRACKET declaration SEMICOLON expr SEMICOLON . expr RBRACKET statements
+
+    LBRACKET    偏移，并进入状态 25
+    IDENTIFIER  偏移，并进入状态 26
+    INTEGER     偏移，并进入状态 27
+    CHAR        偏移，并进入状态 28
+    TRUE        偏移，并进入状态 29
+    FALSE       偏移，并进入状态 30
+    NOT         偏移，并进入状态 31
+    INC         偏移，并进入状态 32
+    DEC         偏移，并进入状态 33
+    MINUS       偏移，并进入状态 34
+
+    expr         转到状态 104
+    addsub_expr  转到状态 36
+    mdm_expr     转到状态 37
+    unary_expr   转到状态 38
+    bool_expr    转到状态 39
+    logic_expr   转到状态 40
+
+
+状态 103
+
+    5 statements: statements . statement
+    8 statement: IF LBRACKET bool_expr RBRACKET statements ELSE statements .
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    T_CHAR      [使用规则 8 以归约 (statement)]
+    T_INT       [使用规则 8 以归约 (statement)]
+    T_BOOL      [使用规则 8 以归约 (statement)]
+    SEMICOLON   [使用规则 8 以归约 (statement)]
+    IF          [使用规则 8 以归约 (statement)]
+    WHILE       [使用规则 8 以归约 (statement)]
+    FOR         [使用规则 8 以归约 (statement)]
+    RETURN      [使用规则 8 以归约 (statement)]
+    CONTINUE    [使用规则 8 以归约 (statement)]
+    BREAK       [使用规则 8 以归约 (statement)]
+    SCANF       [使用规则 8 以归约 (statement)]
+    PRINTF      [使用规则 8 以归约 (statement)]
+    IDENTIFIER  [使用规则 8 以归约 (statement)]
+    $default    使用规则 8 以归约 (statement)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 104
+
+   14 statement: FOR LBRACKET declaration SEMICOLON expr SEMICOLON expr . RBRACKET statements
+
+    RBRACKET  偏移，并进入状态 105
+
+
+状态 105
+
+   14 statement: FOR LBRACKET declaration SEMICOLON expr SEMICOLON expr RBRACKET . statements
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    MAIN        偏移，并进入状态 13
+    LBRACE      偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 15
+
+    statements   转到状态 106
+    statement    转到状态 18
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
+
+
+状态 106
+
+    5 statements: statements . statement
+   14 statement: FOR LBRACKET declaration SEMICOLON expr SEMICOLON expr RBRACKET statements .
+
+    T_CHAR      偏移，并进入状态 1
+    T_INT       偏移，并进入状态 2
+    T_BOOL      偏移，并进入状态 3
+    SEMICOLON   偏移，并进入状态 4
+    IF          偏移，并进入状态 5
+    WHILE       偏移，并进入状态 6
+    FOR         偏移，并进入状态 7
+    RETURN      偏移，并进入状态 8
+    CONTINUE    偏移，并进入状态 9
+    BREAK       偏移，并进入状态 10
+    SCANF       偏移，并进入状态 11
+    PRINTF      偏移，并进入状态 12
+    IDENTIFIER  偏移，并进入状态 15
+
+    T_CHAR      [使用规则 14 以归约 (statement)]
+    T_INT       [使用规则 14 以归约 (statement)]
+    T_BOOL      [使用规则 14 以归约 (statement)]
+    SEMICOLON   [使用规则 14 以归约 (statement)]
+    IF          [使用规则 14 以归约 (statement)]
+    WHILE       [使用规则 14 以归约 (statement)]
+    FOR         [使用规则 14 以归约 (statement)]
+    RETURN      [使用规则 14 以归约 (statement)]
+    CONTINUE    [使用规则 14 以归约 (statement)]
+    BREAK       [使用规则 14 以归约 (statement)]
+    SCANF       [使用规则 14 以归约 (statement)]
+    PRINTF      [使用规则 14 以归约 (statement)]
+    IDENTIFIER  [使用规则 14 以归约 (statement)]
+    $default    使用规则 14 以归约 (statement)
+
+    statement    转到状态 47
+    IOFUNC       转到状态 19
+    declaration  转到状态 20
+    T            转到状态 21
