@@ -1,10 +1,23 @@
 void main(){
-int a=0;
-int b=1;
-int c=3;
-int d=1+2+3;
-int e=1+2*5;
-if(1+1>5){int b=a+2;}
-for(int i=0;i<5;i++){int j=i;}
+    int a=10,s=0;
+    a = 10;
+    s = 0;
+    char ch;
+    scanf("\%d",&ch);
+    while(a>0 && a<=10 || a%100==10 && !a==10){
+        a -= 1;
+        a=!a;
+        int a;
+        a = 10;
+        s += a;
+        if(-s<10){
+            printf("result is:%d\n",s);
+            int b;
+            b = 10;
+            for(int i=0;i<b;i++){
+                printf("Have fun:%d\n",i);
+            }
+            scanf(a);
+        }
+    } 
 }
-

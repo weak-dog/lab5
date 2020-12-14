@@ -5,11 +5,11 @@ using namespace std;
 
 enum ValueType
 {
-    VALUE_BOOL,
-    VALUE_INT,
-    VALUE_CHAR,
-    VALUE_STRING,
-    COMPOSE_STRUCT,
+    VALUE_BOOL,     //布尔类型
+    VALUE_INT,      //整型
+    VALUE_CHAR,     //字符型
+    VALUE_STRING,   //字符串型
+    COMPOSE_STRUCT, 
     COMPOSE_UNION,
     COMPOSE_FUNCTION
 };
@@ -19,6 +19,7 @@ class Type
 public:
     ValueType type;
     Type(ValueType valueType);
+
 public:  
     /* 如果你要设计复杂类型系统的话，可以修改这一部分 */
     ValueType* childType; // for union or struct

@@ -1,5 +1,7 @@
 #include "tree.h"
 static int nodeid=0;
+
+//添加孩子节点
 void TreeNode::addChild(TreeNode* child) {  
         if(this->child==NULL){
             this->child=child;
@@ -9,6 +11,7 @@ void TreeNode::addChild(TreeNode* child) {
         }
 }
 
+//添加兄弟节点
 void TreeNode::addSibling(TreeNode* sibling){
     TreeNode*s=this;
     while(s->sibling!=NULL){
@@ -17,11 +20,13 @@ void TreeNode::addSibling(TreeNode* sibling){
     s->sibling=sibling;
 }
 
-TreeNode::TreeNode(int lineno, NodeType type) {
+//构造函数
+TreeNode::TreeNode(int lineno, int type) {
     this->lineno=lineno;
     this->nodeType=type;
 }
 
+//为AST节点递归编号
 void TreeNode::genNodeId() {
     if(this!=NULL){
         this->nodeID=nodeid++;
@@ -32,9 +37,12 @@ void TreeNode::genNodeId() {
 
 void TreeNode::printNodeInfo() {
     if(this!=NULL){
+        //打印自身基本信息
         cout<<"lno@"<<this->lineno<<setw(8)<<"@"<<this->nodeID<<setw(16)<<nodeType2String(this->nodeType);
-        this->printChildrenId();
+        //打印自身特殊信息
         this->printSpecialInfo();
+        //打印孩子节点编号
+        this->printChildrenId();
         cout<<endl;
     }
 }
@@ -61,11 +69,10 @@ void TreeNode::printAST() {
     }
 }
 
-// You can output more info...
-
 void TreeNode::printSpecialInfo() {
+    //根据节点类型打印特殊信息
     switch(this->nodeType){
-        case NODE_CONST:
+        case NODE_CONST://如果是常量，打印类型和值
             switch (this->type->type){
                 case VALUE_INT:
                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->int_val;
@@ -76,70 +83,53 @@ void TreeNode::printSpecialInfo() {
                 case VALUE_CHAR:
                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->ch_val;
                 break;
+                case VALUE_STRING:
+                cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->ch_val;
+                break;
             }
-        case NODE_VAR:
+        case NODE_VAR://如果是变量，打印变量名和变量类型
             cout<<setw(16)<<" var_name: "<<this->var_name;
             break;
-        case NODE_EXPR:
-            cout<<setw(16)<<"operator:"<<opType2String(this->optype)<<setw(16)<<"type: "<<this->type->getTypeInfo();
+        case NODE_EXPR://如果是表达式，打印运算类型
+            cout<<setw(16)<<" operator: "<<opType2String(this->optype);
             break;
-        case NODE_STMT:
-            cout<<setw(16)<<"stmt:"<<sType2String(this->stype);
+        case NODE_STMT://如果是语句，打印语句类型
+            cout<<setw(16)<<" stmt: "<<sType2String(this->stype);
             break;
-        case NODE_TYPE:
-            cout<<setw(16)<<"type:"<<this->type->getTypeInfo();
+        case NODE_TYPE://如果是类型,打印类型
+            cout<<setw(16)<<" type: "<<this->type->getTypeInfo();
             break;
         default:
             break;
     }
 }
 
+//节点类型转化为字符串
+string TreeNode::nodeType2String (int type){
+    switch(type){    
+        case NODE_PROG:
+            return "program";
+        case NODE_STMT: 
+            return "statement";
+        case NODE_EXPR: 
+            return "expression";  
+        case NODE_CONST: 
+            return "const";        
+        case NODE_VAR: 
+            return "variable";        
+        case NODE_TYPE: 
+            return "type";       
+    }
+    return "<>";
+}
 
-
-
-// void TreeNode::printSpecialInfo() {
-//     switch(this->nodeType){
-//         case NODE_CONST:
-//             switch (this->type->type)
-//             {
-//             case VALUE_INT:
-//                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->int_val;
-//                 break;
-//             case VALUE_CHAR:
-//                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->ch_val;
-//                 break;
-//             case VALUE_BOOL:
-//                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->b_val;
-//                 break;
-//             case VALUE_STRING:
-//                 cout<<setw(16)<<" type: "<<this->type->getTypeInfo()<<setw(16)<<" value: "<<this->str_val;
-//                 break;
-//             default:
-//                 break;
-//             }
-//             break;
-//         case NODE_VAR:
-//             cout<<setw(16)<<" varname: "<<this->var_name<<setw(16)<<"type: "<<this->type->getTypeInfo();
-//             break;
-//         case NODE_EXPR:
-//             cout<<setw(16)<<" operator: "<<opType2String(this->optype)<<setw(16)<<" type: "<<this->type->getTypeInfo();
-//             break;
-//         case NODE_STMT:
-//             cout<<setw(16)<<" stmt: "<<sType2String(this->stype);
-//             break;
-//         case NODE_TYPE:
-//             cout<<setw(16)<<" type: "<<this->type->getTypeInfo();
-//             break;
-//         default:
-//             break;
-//     }
-// }
-string TreeNode::sType2String(StmtType type) {
+//语句类型枚举转化为字符串
+string TreeNode::sType2String(int type) {
     switch(type){
         case STMT_SKIP: 
             return "skip";       
         case STMT_DECL: 
-            return "decl";        
+            return "declation";        
         case STMT_ASSIGN: 
             return "assign";        
         case STMT_RETURN: 
@@ -160,13 +150,15 @@ string TreeNode::sType2String(StmtType type) {
             return "scanf";
         case STMT_PRINTF:
             return "printf";
+        case STMT_BLOCK:
+            return "block";
     }
     return "?";
 }
-string TreeNode::opType2String(OperatorType type){
+
+//运算符类型转化为字符串
+string TreeNode::opType2String(int type){
     switch(type){      
-        case OP_NOT: 
-            return "!";        
         case OP_ADD: 
             return "+";        
         case OP_SUB: 
@@ -176,11 +168,19 @@ string TreeNode::opType2String(OperatorType type){
         case OP_DIV: 
             return "/"; 
         case OP_MOD: 
-            return "%";    
+            return "%";   
+        case OP_INC: 
+            return "++";       
+        case OP_DEC: 
+            return "--";       
+        case OP_MINUS: 
+            return "-"; 
         case OP_AND: 
             return "&&";
         case OP_OR: 
-            return "||";       
+            return "||";     
+        case OP_NOT: 
+            return "!";   
         case OP_LT: 
             return "<";       
         case OP_GT: 
@@ -195,31 +195,7 @@ string TreeNode::opType2String(OperatorType type){
             return "!=";    
         case OP_ASSG: 
             return "=";
-        case OP_INC: 
-            return "++";       
-        case OP_DEC: 
-            return "--";       
-        case OP_MINUS: 
-            return "-"; 
     }
     return "?";    
 }
-string TreeNode::nodeType2String (NodeType type){
-    switch(type){    
-        case NODE_CONST: 
-            return "const";        
-        case NODE_VAR: 
-            return "variable";        
-        case NODE_EXPR: 
-            return "expression";       
-        case NODE_TYPE: 
-            return "type";       
-        case NODE_STMT: 
-            return "statement"; 
-        case NODE_PROG: 
-            return "program";    
-        case NODE_COMP: 
-            return "compUnit";
-    }
-    return "<>";
-}
+

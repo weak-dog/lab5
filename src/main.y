@@ -7,7 +7,7 @@
     int yyerror( char const * );
 %}
 
-%token T_CHAR T_INT T_BOOL 
+%token T_CHAR T_INT T_BOOL ADDR
 %token SEMICOLON COMMA //; ,
 %token IF ELSE WHILE FOR RETURN CONTINUE BREAK
 %token SCANF PRINTF MAIN
@@ -15,30 +15,26 @@
 %token IDENTIFIER INTEGER CHAR BOOL STRING
 %token TRUE FALSE
 
-%right ASSIGN //=
+%right ASSIGN ADDASSIGN SUBASSIGN MULASSIGN DIVASSIGN //=
 %left AND OR
-%right NOT
 %left LT GT LE GE EQ NEQ //< > <= >= == !=
 %left ADD SUB //+-
 %left MUL DIV MOD //* /
+%right NOT //!
 %right INC DEC
 %right MINUS  //-
 %%
 
 program: statements {root = new TreeNode(0, NODE_PROG); root->addChild($1);}
 
-statements:  statement {$$=$1;}
-| MAIN statements{
-    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
-    node->stype=STMT_MAIN;
-    node->addChild($2);
-    $$=node;
-}
+statements: statement {$$=$1;}
+| MAIN statements{$$=$1;$$->addSibling($2);}
 | LBRACE statements RBRACE {$$=$2;}
 | statements statement {$$=$1;$$->addSibling($2);}
 ;
 
 statement: SEMICOLON {$$ = new TreeNode($1->lineno, NODE_STMT); $$->stype = STMT_SKIP;}
+| assign {$$=$1;}
 | declaration {$$ = $1;}
 | IF LBRACKET bool_expr RBRACKET statements ELSE statements {
     TreeNode* node=new TreeNode($3->lineno,NODE_STMT);
@@ -88,29 +84,63 @@ IOFUNC: PRINTF LBRACKET expr RBRACKET {
     node->addChild($3);
     $$=node;
 }
+| PRINTF LBRACKET STRING COMMA expr RBRACKET {
+    TreeNode* node=new TreeNode($3->lineno,NODE_STMT);
+    node->stype=STMT_PRINTF;
+    node->addChild($3);
+    node->addChild($5);
+    $$=node;
+}
 | SCANF LBRACKET expr RBRACKET {
     TreeNode* node=new TreeNode($3->lineno,NODE_STMT);
     node->stype=STMT_SCANF;
     node->addChild($3);
     $$=node;
-};
-
-declaration: T IDENTIFIER {
-    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
-    node->stype=STMT_DECL;
-    node->addChild($1);
-    node->addChild($2);
+}
+| SCANF LBRACKET STRING COMMA expr RBRACKET {
+    TreeNode* node=new TreeNode($3->lineno,NODE_STMT);
+    node->stype=STMT_SCANF;
+    node->addChild($3);
+    node->addChild($5);
     $$=node;
 }
-| T IDENTIFIER ASSIGN expr {
+| SCANF LBRACKET STRING COMMA ADDR expr RBRACKET {
+    TreeNode* node=new TreeNode($3->lineno,NODE_STMT);
+    node->stype=STMT_SCANF;
+    node->addChild($3);
+    node->addChild($6);
+    $$=node;
+};
+
+assign: IDENTIFIER ASSIGN expr {
     TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
     node->stype=STMT_ASSIGN;
     node->addChild($1);
-    node->addChild($2);
-    node->addChild($4);
+    node->addChild($3);
     $$=node;
 }
-| IDENTIFIER ASSIGN expr {
+| IDENTIFIER ADDASSIGN expr {
+    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
+    node->stype=STMT_ASSIGN;
+    node->addChild($1);
+    node->addChild($3);
+    $$=node;
+}
+| IDENTIFIER SUBASSIGN expr {
+    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
+    node->stype=STMT_ASSIGN;
+    node->addChild($1);
+    node->addChild($3);
+    $$=node;
+}
+| IDENTIFIER MULASSIGN expr {
+    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
+    node->stype=STMT_ASSIGN;
+    node->addChild($1);
+    node->addChild($3);
+    $$=node;
+}
+| IDENTIFIER DIVASSIGN expr {
     TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
     node->stype=STMT_ASSIGN;
     node->addChild($1);
@@ -118,6 +148,41 @@ declaration: T IDENTIFIER {
     $$=node;
 }
 ;
+
+assigns: assign {$$=$1;}
+| assigns COMMA assign {
+    $$=$1;
+    $$->addSibling($3);
+};
+
+idlist: IDENTIFIER {$$=$1;}
+| idlist COMMA IDENTIFIER {
+    $$=$1;
+    $$->addSibling($3);
+};
+
+declaration: T idlist { 
+    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
+    node->stype=STMT_DECL;
+    node->addChild($1);
+    node->addChild($2);
+    $$=node;
+}
+| T assigns { 
+    TreeNode* node=new TreeNode($1->lineno,NODE_STMT);
+    node->stype=STMT_DECL;
+    node->addChild($1);
+    node->addChild($2);
+    $$=node;
+}
+| declaration COMMA idlist {
+    $$=$1;
+    $$->addSibling($3);
+}
+| declaration COMMA assigns {
+    $$=$1;
+    $$->addSibling($3);
+};
 
 expr: addsub_expr {$$=$1;}
 | bool_expr {$$=$1;}
@@ -168,6 +233,13 @@ mdm_expr
     node->addChild($3);
     $$=node;
 }
+| SUB unary_expr %prec MINUS {
+        TreeNode *node=new TreeNode($2->lineno,NODE_EXPR);
+        node->optype=OP_MINUS;
+        node->type=TYPE_INT;
+        node->addChild($2);
+        $$=node;
+    }
 ;
 
 unary_expr: MINUS unary_expr {
@@ -178,6 +250,12 @@ unary_expr: MINUS unary_expr {
     $$=node;
 }
 | IDENTIFIER {$$=$1;}
+| NOT IDENTIFIER {
+    TreeNode* node=new TreeNode($1->lineno,NODE_EXPR);
+    node->optype=OP_NOT;
+    node->type=TYPE_BOOL;
+    node->addChild($2);
+    $$=node;}
 | INTEGER {$$=$1;}
 | CHAR {$$=$1;}
 | LBRACKET expr RBRACKET {$$=$1;}
@@ -213,13 +291,6 @@ unary_expr: MINUS unary_expr {
 
 bool_expr: TRUE {$$=$1;}
 | FALSE {$$=$1;}
-| NOT bool_expr {
-    TreeNode* node=new TreeNode($1->lineno,NODE_EXPR);
-    node->optype=OP_NOT;
-    node->type=TYPE_BOOL;
-    node->addChild($2);
-    $$=node;
-}
 | logic_expr {$$=$1;}
 | bool_expr AND logic_expr {
     TreeNode* node=new TreeNode($3->lineno,NODE_EXPR);
