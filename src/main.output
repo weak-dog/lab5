@@ -5,25 +5,21 @@
 
 状态 8 冲突：10 项偏移/归约
 状态 16 冲突：2 项偏移/归约
-状态 38 冲突：1 项偏移/归约
-状态 47 冲突：2 项偏移/归约
-状态 51 冲突：23 项偏移/归约
-状态 53 冲突：1 项偏移/归约
-状态 54 冲突：1 项偏移/归约
-状态 55 冲突：1 项偏移/归约
-状态 56 冲突：1 项偏移/归约
-状态 57 冲突：1 项偏移/归约
-状态 144 冲突：24 项偏移/归约
-状态 145 冲突：23 项偏移/归约
-状态 156 冲突：23 项偏移/归约
-状态 167 冲突：23 项偏移/归约
-状态 168 冲突：23 项偏移/归约
-状态 169 冲突：23 项偏移/归约
-状态 171 冲突：23 项偏移/归约
-状态 177 冲突：23 项偏移/归约
-状态 178 冲突：23 项偏移/归约
-状态 179 冲突：23 项偏移/归约
-状态 181 冲突：23 项偏移/归约
+状态 37 冲突：1 项偏移/归约
+状态 42 冲突：2 项偏移/归约
+状态 43 冲突：1 项偏移/归约
+状态 46 冲突：23 项偏移/归约
+状态 117 冲突：24 项偏移/归约
+状态 118 冲突：23 项偏移/归约
+状态 129 冲突：23 项偏移/归约
+状态 140 冲突：23 项偏移/归约
+状态 141 冲突：23 项偏移/归约
+状态 142 冲突：23 项偏移/归约
+状态 144 冲突：23 项偏移/归约
+状态 150 冲突：23 项偏移/归约
+状态 151 冲突：23 项偏移/归约
+状态 152 冲突：23 项偏移/归约
+状态 154 冲突：23 项偏移/归约
 
 
 语法
@@ -62,8 +58,8 @@
    24            | IDENTIFIER MULASSIGN expr
    25            | IDENTIFIER DIVASSIGN expr
 
-   26 if_stmt: IF LP bool_expr RP statements ELSE statements
-   27        | IF LP bool_expr RP statements
+   26 if_stmt: IF LP expr RP statements ELSE statements
+   27        | IF LP expr RP statements
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON expr RP statements
    29         | FOR LP SEMICOLON expr SEMICOLON expr RP statements
@@ -74,7 +70,7 @@
    34         | FOR LP SEMICOLON SEMICOLON expr RP statements
    35         | FOR LP SEMICOLON SEMICOLON RP statements
 
-   36 while_stmt: WHILE LP bool_expr RP statements
+   36 while_stmt: WHILE LP expr RP statements
 
    37 jump_stmt: BREAK
    38          | CONTINUE
@@ -89,58 +85,43 @@
    46        | SCANF LP STRING COMMA ADDR expr RP
 
    47 expr: LP expr RP
-   48     | addsub_expr
-   49     | bool_expr
+   48     | expr ADD expr
+   49     | expr SUB expr
+   50     | expr MUL expr
+   51     | expr DIV expr
+   52     | expr MOD expr
+   53     | SUB expr
+   54     | INC IDENTIFIER
+   55     | IDENTIFIER INC
+   56     | DEC IDENTIFIER
+   57     | IDENTIFIER DEC
+   58     | expr AND expr
+   59     | expr OR expr
+   60     | NOT expr
+   61     | expr LT expr
+   62     | expr GT expr
+   63     | expr LE expr
+   64     | expr GE expr
+   65     | expr EQ expr
+   66     | expr NEQ expr
+   67     | TRUE
+   68     | FALSE
+   69     | IDENTIFIER
+   70     | CHAR
+   71     | INTEGER
 
-   50 addsub_expr: LP addsub_expr RP
-   51            | mdm_expr
-   52            | addsub_expr ADD addsub_expr
-   53            | addsub_expr SUB addsub_expr
-
-   54 mdm_expr: LP mdm_expr RP
-   55         | unary_expr
-   56         | mdm_expr MUL mdm_expr
-   57         | mdm_expr DIV mdm_expr
-   58         | mdm_expr MOD mdm_expr
-
-   59 unary_expr: LP unary_expr RP
-   60           | SUB unary_expr
-   61           | IDENTIFIER
-   62           | NOT IDENTIFIER
-   63           | INTEGER
-   64           | CHAR
-   65           | INC IDENTIFIER
-   66           | IDENTIFIER INC
-   67           | DEC IDENTIFIER
-   68           | IDENTIFIER DEC
-
-   69 bool_expr: LP bool_expr RP
-   70          | logic_expr
-   71          | bool_expr AND logic_expr
-   72          | bool_expr OR logic_expr
-
-   73 logic_expr: LP logic_expr RP
-   74           | TRUE
-   75           | FALSE
-   76           | addsub_expr LT addsub_expr
-   77           | addsub_expr GT addsub_expr
-   78           | addsub_expr LE addsub_expr
-   79           | addsub_expr GE addsub_expr
-   80           | addsub_expr EQ addsub_expr
-   81           | addsub_expr NEQ addsub_expr
-
-   82 T: T_INT
-   83  | T_CHAR
-   84  | T_BOOL
+   72 T: T_INT
+   73  | T_CHAR
+   74  | T_BOOL
 
 
 终结语词，附有它们出现处的规则
 
     $end (0) 0
     error (256)
-    T_CHAR (258) 83
-    T_INT (259) 82
-    T_BOOL (260) 84
+    T_CHAR (258) 73
+    T_INT (259) 72
+    T_BOOL (260) 74
     ADDR (261) 43 46
     SEMICOLON (262) 15 28 29 30 31 32 33 34 35
     COMMA (263) 17 18 42 43 45 46
@@ -154,38 +135,38 @@
     SCANF (271) 44 45 46
     PRINTF (272) 41 42 43
     MAIN (273) 2
-    LP (274) 26 27 28 29 30 31 32 33 34 35 36 41 42 43 44 45 46 47 50 54 59 69 73
-    RP (275) 26 27 28 29 30 31 32 33 34 35 36 41 42 43 44 45 46 47 50 54 59 69 73
+    LP (274) 26 27 28 29 30 31 32 33 34 35 36 41 42 43 44 45 46 47
+    RP (275) 26 27 28 29 30 31 32 33 34 35 36 41 42 43 44 45 46 47
     LB (276) 16
     RB (277) 16
-    IDENTIFIER (278) 18 19 21 22 23 24 25 61 62 65 66 67 68
-    INTEGER (279) 63
-    CHAR (280) 64
+    IDENTIFIER (278) 18 19 21 22 23 24 25 54 55 56 57 69
+    INTEGER (279) 71
+    CHAR (280) 70
     BOOL (281)
     STRING (282) 42 43 45 46
-    TRUE (283) 74
-    FALSE (284) 75
+    TRUE (283) 67
+    FALSE (284) 68
     ASSIGN (285) 21
     ADDASSIGN (286) 22
     SUBASSIGN (287) 23
     MULASSIGN (288) 24
     DIVASSIGN (289) 25
-    AND (290) 71
-    OR (291) 72
-    LT (292) 76
-    GT (293) 77
-    LE (294) 78
-    GE (295) 79
-    EQ (296) 80
-    NEQ (297) 81
-    ADD (298) 52
-    SUB (299) 53 60
-    MUL (300) 56
-    DIV (301) 57
-    MOD (302) 58
-    NOT (303) 62
-    INC (304) 65 66
-    DEC (305) 67 68
+    AND (290) 58
+    OR (291) 59
+    LT (292) 61
+    GT (293) 62
+    LE (294) 63
+    GE (295) 64
+    EQ (296) 65
+    NEQ (297) 66
+    ADD (298) 48
+    SUB (299) 49 53
+    MUL (300) 50
+    DIV (301) 51
+    MOD (302) 52
+    NOT (303) 60
+    INC (304) 54 55
+    DEC (305) 56 57
     MINUS (306)
 
 
@@ -230,25 +211,10 @@
         on left: 41 42 43 44 45 46
         on right: 12
     expr (65)
-        on left: 47 48 49
-        on right: 14 21 22 23 24 25 28 29 30 31 33 34 40 41 42 43 44 45 46 47
-    addsub_expr (66)
-        on left: 50 51 52 53
-        on right: 48 50 52 53 76 77 78 79 80 81
-    mdm_expr (67)
-        on left: 54 55 56 57 58
-        on right: 51 54 56 57 58
-    unary_expr (68)
-        on left: 59 60 61 62 63 64 65 66 67 68
-        on right: 55 59 60
-    bool_expr (69)
-        on left: 69 70 71 72
-        on right: 26 27 36 49 69 71 72
-    logic_expr (70)
-        on left: 73 74 75 76 77 78 79 80 81
-        on right: 70 71 72 73
-    T (71)
-        on left: 82 83 84
+        on left: 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+        on right: 14 21 22 23 24 25 26 27 28 29 30 31 33 34 36 40 41 42 43 44 45 46 47 48 49 50 51 52 53 58 59 60 61 62 63 64 65 66
+    T (66)
+        on left: 72 73 74
         on right: 19 20
 
 
@@ -294,33 +260,28 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
 状态 1
 
-   83 T: T_CHAR .
+   73 T: T_CHAR .
 
-    $default  使用规则 83 以归约 (T)
+    $default  使用规则 73 以归约 (T)
 
 
 状态 2
 
-   82 T: T_INT .
+   72 T: T_INT .
 
-    $default  使用规则 82 以归约 (T)
+    $default  使用规则 72 以归约 (T)
 
 
 状态 3
 
-   84 T: T_BOOL .
+   74 T: T_BOOL .
 
-    $default  使用规则 84 以归约 (T)
+    $default  使用规则 74 以归约 (T)
 
 
 状态 4
@@ -332,17 +293,17 @@
 
 状态 5
 
-   26 if_stmt: IF . LP bool_expr RP statements ELSE statements
-   27        | IF . LP bool_expr RP statements
+   26 if_stmt: IF . LP expr RP statements ELSE statements
+   27        | IF . LP expr RP statements
 
-    LP  偏移，并进入状态 44
+    LP  偏移，并进入状态 39
 
 
 状态 6
 
-   36 while_stmt: WHILE . LP bool_expr RP statements
+   36 while_stmt: WHILE . LP expr RP statements
 
-    LP  偏移，并进入状态 45
+    LP  偏移，并进入状态 40
 
 
 状态 7
@@ -356,7 +317,7 @@
    34         | FOR . LP SEMICOLON SEMICOLON expr RP statements
    35         | FOR . LP SEMICOLON SEMICOLON RP statements
 
-    LP  偏移，并进入状态 46
+    LP  偏移，并进入状态 41
 
 
 状态 8
@@ -365,7 +326,7 @@
    40          | RETURN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -387,12 +348,7 @@
     DEC         [使用规则 39 以归约 (jump_stmt)]
     $default    使用规则 39 以归约 (jump_stmt)
 
-    expr         转到状态 48
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 43
 
 
 状态 9
@@ -415,7 +371,7 @@
    45        | SCANF . LP STRING COMMA expr RP
    46        | SCANF . LP STRING COMMA ADDR expr RP
 
-    LP  偏移，并进入状态 49
+    LP  偏移，并进入状态 44
 
 
 状态 12
@@ -424,7 +380,7 @@
    42        | PRINTF . LP STRING COMMA expr RP
    43        | PRINTF . LP STRING COMMA ADDR expr RP
 
-    LP  偏移，并进入状态 50
+    LP  偏移，并进入状态 45
 
 
 状态 13
@@ -456,7 +412,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 51
+    statements   转到状态 46
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -468,25 +424,15 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
 状态 14
 
    47 expr: LP . expr RP
-   50 addsub_expr: LP . addsub_expr RP
-   54 mdm_expr: LP . mdm_expr RP
-   59 unary_expr: LP . unary_expr RP
-   69 bool_expr: LP . bool_expr RP
-   73 logic_expr: LP . logic_expr RP
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -496,12 +442,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 52
-    addsub_expr  转到状态 53
-    mdm_expr     转到状态 54
-    unary_expr   转到状态 55
-    bool_expr    转到状态 56
-    logic_expr   转到状态 57
+    expr  转到状态 47
 
 
 状态 15
@@ -533,7 +474,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 58
+    statements   转到状态 48
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -545,12 +486,7 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
 状态 16
@@ -560,93 +496,106 @@
    23            | IDENTIFIER . SUBASSIGN expr
    24            | IDENTIFIER . MULASSIGN expr
    25            | IDENTIFIER . DIVASSIGN expr
-   61 unary_expr: IDENTIFIER .
-   66           | IDENTIFIER . INC
-   68           | IDENTIFIER . DEC
+   55 expr: IDENTIFIER . INC
+   57     | IDENTIFIER . DEC
+   69     | IDENTIFIER .
 
-    ASSIGN     偏移，并进入状态 59
-    ADDASSIGN  偏移，并进入状态 60
-    SUBASSIGN  偏移，并进入状态 61
-    MULASSIGN  偏移，并进入状态 62
-    DIVASSIGN  偏移，并进入状态 63
-    INC        偏移，并进入状态 64
-    DEC        偏移，并进入状态 65
+    ASSIGN     偏移，并进入状态 49
+    ADDASSIGN  偏移，并进入状态 50
+    SUBASSIGN  偏移，并进入状态 51
+    MULASSIGN  偏移，并进入状态 52
+    DIVASSIGN  偏移，并进入状态 53
+    INC        偏移，并进入状态 54
+    DEC        偏移，并进入状态 55
 
-    INC       [使用规则 61 以归约 (unary_expr)]
-    DEC       [使用规则 61 以归约 (unary_expr)]
-    $default  使用规则 61 以归约 (unary_expr)
+    INC       [使用规则 69 以归约 (expr)]
+    DEC       [使用规则 69 以归约 (expr)]
+    $default  使用规则 69 以归约 (expr)
 
 
 状态 17
 
-   63 unary_expr: INTEGER .
+   71 expr: INTEGER .
 
-    $default  使用规则 63 以归约 (unary_expr)
+    $default  使用规则 71 以归约 (expr)
 
 
 状态 18
 
-   64 unary_expr: CHAR .
+   70 expr: CHAR .
 
-    $default  使用规则 64 以归约 (unary_expr)
+    $default  使用规则 70 以归约 (expr)
 
 
 状态 19
 
-   74 logic_expr: TRUE .
+   67 expr: TRUE .
 
-    $default  使用规则 74 以归约 (logic_expr)
+    $default  使用规则 67 以归约 (expr)
 
 
 状态 20
 
-   75 logic_expr: FALSE .
+   68 expr: FALSE .
 
-    $default  使用规则 75 以归约 (logic_expr)
+    $default  使用规则 68 以归约 (expr)
 
 
 状态 21
 
-   60 unary_expr: SUB . unary_expr
+   53 expr: SUB . expr
 
-    LP          偏移，并进入状态 66
-    IDENTIFIER  偏移，并进入状态 47
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
     SUB         偏移，并进入状态 21
     NOT         偏移，并进入状态 22
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    unary_expr  转到状态 67
+    expr  转到状态 56
 
 
 状态 22
 
-   62 unary_expr: NOT . IDENTIFIER
+   60 expr: NOT . expr
 
-    IDENTIFIER  偏移，并进入状态 68
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 57
 
 
 状态 23
 
-   65 unary_expr: INC . IDENTIFIER
+   54 expr: INC . IDENTIFIER
 
-    IDENTIFIER  偏移，并进入状态 69
+    IDENTIFIER  偏移，并进入状态 58
 
 
 状态 24
 
-   67 unary_expr: DEC . IDENTIFIER
+   56 expr: DEC . IDENTIFIER
 
-    IDENTIFIER  偏移，并进入状态 70
+    IDENTIFIER  偏移，并进入状态 59
 
 
 状态 25
 
     0 $accept: program . $end
 
-    $end  偏移，并进入状态 71
+    $end  偏移，并进入状态 60
 
 
 状态 26
@@ -680,7 +629,7 @@
 
     $default  使用规则 1 以归约 (program)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -691,12 +640,7 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
 状态 27
@@ -726,7 +670,7 @@
    17 decl_stmt: decl_stmt . COMMA assign_stmt
    18          | decl_stmt . COMMA IDENTIFIER
 
-    COMMA  偏移，并进入状态 73
+    COMMA  偏移，并进入状态 62
 
     $default  使用规则 6 以归约 (statement)
 
@@ -776,131 +720,86 @@
 状态 37
 
    14 statement: expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    SUB       [使用规则 14 以归约 (statement)]
     $default  使用规则 14 以归约 (statement)
 
 
 状态 38
 
-   48 expr: addsub_expr .
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   76 logic_expr: addsub_expr . LT addsub_expr
-   77           | addsub_expr . GT addsub_expr
-   78           | addsub_expr . LE addsub_expr
-   79           | addsub_expr . GE addsub_expr
-   80           | addsub_expr . EQ addsub_expr
-   81           | addsub_expr . NEQ addsub_expr
+   19 decl_stmt: T . IDENTIFIER
+   20          | T . assign_stmt
 
-    LT   偏移，并进入状态 74
-    GT   偏移，并进入状态 75
-    LE   偏移，并进入状态 76
-    GE   偏移，并进入状态 77
-    EQ   偏移，并进入状态 78
-    NEQ  偏移，并进入状态 79
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
+    IDENTIFIER  偏移，并进入状态 76
 
-    SUB       [使用规则 48 以归约 (expr)]
-    $default  使用规则 48 以归约 (expr)
+    assign_stmt  转到状态 77
 
 
 状态 39
 
-   51 addsub_expr: mdm_expr .
-   56 mdm_expr: mdm_expr . MUL mdm_expr
-   57         | mdm_expr . DIV mdm_expr
-   58         | mdm_expr . MOD mdm_expr
+   26 if_stmt: IF LP . expr RP statements ELSE statements
+   27        | IF LP . expr RP statements
 
-    MUL  偏移，并进入状态 82
-    DIV  偏移，并进入状态 83
-    MOD  偏移，并进入状态 84
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
 
-    $default  使用规则 51 以归约 (addsub_expr)
+    expr  转到状态 78
 
 
 状态 40
 
-   55 mdm_expr: unary_expr .
+   36 while_stmt: WHILE LP . expr RP statements
 
-    $default  使用规则 55 以归约 (mdm_expr)
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 79
 
 
 状态 41
-
-   49 expr: bool_expr .
-   71 bool_expr: bool_expr . AND logic_expr
-   72          | bool_expr . OR logic_expr
-
-    AND  偏移，并进入状态 85
-    OR   偏移，并进入状态 86
-
-    $default  使用规则 49 以归约 (expr)
-
-
-状态 42
-
-   70 bool_expr: logic_expr .
-
-    $default  使用规则 70 以归约 (bool_expr)
-
-
-状态 43
-
-   19 decl_stmt: T . IDENTIFIER
-   20          | T . assign_stmt
-
-    IDENTIFIER  偏移，并进入状态 87
-
-    assign_stmt  转到状态 88
-
-
-状态 44
-
-   26 if_stmt: IF LP . bool_expr RP statements ELSE statements
-   27        | IF LP . bool_expr RP statements
-
-    LP          偏移，并进入状态 89
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 90
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 91
-    logic_expr   转到状态 42
-
-
-状态 45
-
-   36 while_stmt: WHILE LP . bool_expr RP statements
-
-    LP          偏移，并进入状态 89
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 90
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 92
-    logic_expr   转到状态 42
-
-
-状态 46
 
    28 for_stmt: FOR LP . decl_stmt SEMICOLON expr SEMICOLON expr RP statements
    29         | FOR LP . SEMICOLON expr SEMICOLON expr RP statements
@@ -914,44 +813,72 @@
     T_CHAR     偏移，并进入状态 1
     T_INT      偏移，并进入状态 2
     T_BOOL     偏移，并进入状态 3
-    SEMICOLON  偏移，并进入状态 93
+    SEMICOLON  偏移，并进入状态 80
 
-    decl_stmt  转到状态 94
-    T          转到状态 43
-
-
-状态 47
-
-   61 unary_expr: IDENTIFIER .
-   66           | IDENTIFIER . INC
-   68           | IDENTIFIER . DEC
-
-    INC  偏移，并进入状态 64
-    DEC  偏移，并进入状态 65
-
-    INC       [使用规则 61 以归约 (unary_expr)]
-    DEC       [使用规则 61 以归约 (unary_expr)]
-    $default  使用规则 61 以归约 (unary_expr)
+    decl_stmt  转到状态 81
+    T          转到状态 38
 
 
-状态 48
+状态 42
+
+   55 expr: IDENTIFIER . INC
+   57     | IDENTIFIER . DEC
+   69     | IDENTIFIER .
+
+    INC  偏移，并进入状态 54
+    DEC  偏移，并进入状态 55
+
+    INC       [使用规则 69 以归约 (expr)]
+    DEC       [使用规则 69 以归约 (expr)]
+    $default  使用规则 69 以归约 (expr)
+
+
+状态 43
 
    40 jump_stmt: RETURN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    SUB       [使用规则 40 以归约 (jump_stmt)]
     $default  使用规则 40 以归约 (jump_stmt)
 
 
-状态 49
+状态 44
 
    44 io_stmt: SCANF LP . expr RP
    45        | SCANF LP . STRING COMMA expr RP
    46        | SCANF LP . STRING COMMA ADDR expr RP
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
-    STRING      偏移，并进入状态 95
+    STRING      偏移，并进入状态 82
     TRUE        偏移，并进入状态 19
     FALSE       偏移，并进入状态 20
     SUB         偏移，并进入状态 21
@@ -959,25 +886,20 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 96
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 83
 
 
-状态 50
+状态 45
 
    41 io_stmt: PRINTF LP . expr RP
    42        | PRINTF LP . STRING COMMA expr RP
    43        | PRINTF LP . STRING COMMA ADDR expr RP
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
-    STRING      偏移，并进入状态 97
+    STRING      偏移，并进入状态 84
     TRUE        偏移，并进入状态 19
     FALSE       偏移，并进入状态 20
     SUB         偏移，并进入状态 21
@@ -985,15 +907,10 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 98
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 85
 
 
-状态 51
+状态 46
 
     2 statements: MAIN statements .
     3           | statements . statement
@@ -1047,7 +964,7 @@
     DEC         [使用规则 2 以归约 (statements)]
     $default    使用规则 2 以归约 (statements)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -1058,101 +975,43 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 52
+状态 47
 
    47 expr: LP expr . RP
+   48     | expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 99
-
-
-状态 53
-
-   48 expr: addsub_expr .
-   50 addsub_expr: LP addsub_expr . RP
-   52            | addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   76 logic_expr: addsub_expr . LT addsub_expr
-   77           | addsub_expr . GT addsub_expr
-   78           | addsub_expr . LE addsub_expr
-   79           | addsub_expr . GE addsub_expr
-   80           | addsub_expr . EQ addsub_expr
-   81           | addsub_expr . NEQ addsub_expr
-
-    RP   偏移，并进入状态 100
-    LT   偏移，并进入状态 74
-    GT   偏移，并进入状态 75
-    LE   偏移，并进入状态 76
-    GE   偏移，并进入状态 77
-    EQ   偏移，并进入状态 78
-    NEQ  偏移，并进入状态 79
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    RP  [使用规则 48 以归约 (expr)]
-
-
-状态 54
-
-   51 addsub_expr: mdm_expr .
-   54 mdm_expr: LP mdm_expr . RP
-   56         | mdm_expr . MUL mdm_expr
-   57         | mdm_expr . DIV mdm_expr
-   58         | mdm_expr . MOD mdm_expr
-
-    RP   偏移，并进入状态 101
-    MUL  偏移，并进入状态 82
-    DIV  偏移，并进入状态 83
-    MOD  偏移，并进入状态 84
-
-    RP        [使用规则 51 以归约 (addsub_expr)]
-    $default  使用规则 51 以归约 (addsub_expr)
+    RP   偏移，并进入状态 86
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 55
-
-   55 mdm_expr: unary_expr .
-   59 unary_expr: LP unary_expr . RP
-
-    RP  偏移，并进入状态 102
-
-    RP        [使用规则 55 以归约 (mdm_expr)]
-    $default  使用规则 55 以归约 (mdm_expr)
-
-
-状态 56
-
-   49 expr: bool_expr .
-   69 bool_expr: LP bool_expr . RP
-   71          | bool_expr . AND logic_expr
-   72          | bool_expr . OR logic_expr
-
-    RP   偏移，并进入状态 103
-    AND  偏移，并进入状态 85
-    OR   偏移，并进入状态 86
-
-    RP  [使用规则 49 以归约 (expr)]
-
-
-状态 57
-
-   70 bool_expr: logic_expr .
-   73 logic_expr: LP logic_expr . RP
-
-    RP  偏移，并进入状态 104
-
-    RP        [使用规则 70 以归约 (bool_expr)]
-    $default  使用规则 70 以归约 (bool_expr)
-
-
-状态 58
+状态 48
 
     3 statements: statements . statement
    16 block: LB statements . RB
@@ -1171,7 +1030,7 @@
     PRINTF      偏移，并进入状态 12
     LP          偏移，并进入状态 14
     LB          偏移，并进入状态 15
-    RB          偏移，并进入状态 105
+    RB          偏移，并进入状态 87
     IDENTIFIER  偏移，并进入状态 16
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
@@ -1182,7 +1041,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -1193,20 +1052,15 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 59
+状态 49
 
    21 assign_stmt: IDENTIFIER ASSIGN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1216,20 +1070,15 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 106
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 88
 
 
-状态 60
+状态 50
 
    22 assign_stmt: IDENTIFIER ADDASSIGN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1239,20 +1088,15 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 107
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 89
 
 
-状态 61
+状态 51
 
    23 assign_stmt: IDENTIFIER SUBASSIGN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1262,20 +1106,15 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 108
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 90
 
 
-状态 62
+状态 52
 
    24 assign_stmt: IDENTIFIER MULASSIGN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1285,20 +1124,15 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 109
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 91
 
 
-状态 63
+状态 53
 
    25 assign_stmt: IDENTIFIER DIVASSIGN . expr
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1308,334 +1142,336 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 110
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 92
 
 
-状态 64
+状态 54
 
-   66 unary_expr: IDENTIFIER INC .
+   55 expr: IDENTIFIER INC .
 
-    $default  使用规则 66 以归约 (unary_expr)
-
-
-状态 65
-
-   68 unary_expr: IDENTIFIER DEC .
-
-    $default  使用规则 68 以归约 (unary_expr)
+    $default  使用规则 55 以归约 (expr)
 
 
-状态 66
+状态 55
 
-   59 unary_expr: LP . unary_expr RP
+   57 expr: IDENTIFIER DEC .
 
-    LP          偏移，并进入状态 66
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    unary_expr  转到状态 111
+    $default  使用规则 57 以归约 (expr)
 
 
-状态 67
+状态 56
 
-   60 unary_expr: SUB unary_expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   53     | SUB expr .
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    $default  使用规则 60 以归约 (unary_expr)
-
-
-状态 68
-
-   62 unary_expr: NOT IDENTIFIER .
-
-    $default  使用规则 62 以归约 (unary_expr)
-
-
-状态 69
-
-   65 unary_expr: INC IDENTIFIER .
-
-    $default  使用规则 65 以归约 (unary_expr)
-
-
-状态 70
-
-   67 unary_expr: DEC IDENTIFIER .
-
-    $default  使用规则 67 以归约 (unary_expr)
+    $default  使用规则 53 以归约 (expr)
 
 
-状态 71
+状态 57
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   60     | NOT expr .
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    $default  使用规则 60 以归约 (expr)
+
+
+状态 58
+
+   54 expr: INC IDENTIFIER .
+
+    $default  使用规则 54 以归约 (expr)
+
+
+状态 59
+
+   56 expr: DEC IDENTIFIER .
+
+    $default  使用规则 56 以归约 (expr)
+
+
+状态 60
 
     0 $accept: program $end .
 
     $default  接受
 
 
-状态 72
+状态 61
 
     3 statements: statements statement .
 
     $default  使用规则 3 以归约 (statements)
 
 
-状态 73
+状态 62
 
    17 decl_stmt: decl_stmt COMMA . assign_stmt
    18          | decl_stmt COMMA . IDENTIFIER
 
-    IDENTIFIER  偏移，并进入状态 112
+    IDENTIFIER  偏移，并进入状态 93
 
-    assign_stmt  转到状态 113
+    assign_stmt  转到状态 94
+
+
+状态 63
+
+   58 expr: expr AND . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 95
+
+
+状态 64
+
+   59 expr: expr OR . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 96
+
+
+状态 65
+
+   61 expr: expr LT . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 97
+
+
+状态 66
+
+   62 expr: expr GT . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 98
+
+
+状态 67
+
+   63 expr: expr LE . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 99
+
+
+状态 68
+
+   64 expr: expr GE . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 100
+
+
+状态 69
+
+   65 expr: expr EQ . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 101
+
+
+状态 70
+
+   66 expr: expr NEQ . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 102
+
+
+状态 71
+
+   48 expr: expr ADD . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 103
+
+
+状态 72
+
+   49 expr: expr SUB . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 104
+
+
+状态 73
+
+   50 expr: expr MUL . expr
+
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
+    INTEGER     偏移，并进入状态 17
+    CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
+    SUB         偏移，并进入状态 21
+    NOT         偏移，并进入状态 22
+    INC         偏移，并进入状态 23
+    DEC         偏移，并进入状态 24
+
+    expr  转到状态 105
 
 
 状态 74
 
-   76 logic_expr: addsub_expr LT . addsub_expr
+   51 expr: expr DIV . expr
 
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
     SUB         偏移，并进入状态 21
     NOT         偏移，并进入状态 22
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    addsub_expr  转到状态 115
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
+    expr  转到状态 106
 
 
 状态 75
 
-   77 logic_expr: addsub_expr GT . addsub_expr
+   52 expr: expr MOD . expr
 
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
+    LP          偏移，并进入状态 14
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
+    TRUE        偏移，并进入状态 19
+    FALSE       偏移，并进入状态 20
     SUB         偏移，并进入状态 21
     NOT         偏移，并进入状态 22
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    addsub_expr  转到状态 116
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
+    expr  转到状态 107
 
 
 状态 76
-
-   78 logic_expr: addsub_expr LE . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 117
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 77
-
-   79 logic_expr: addsub_expr GE . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 118
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 78
-
-   80 logic_expr: addsub_expr EQ . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 119
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 79
-
-   81 logic_expr: addsub_expr NEQ . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 120
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 80
-
-   52 addsub_expr: addsub_expr ADD . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 121
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 81
-
-   53 addsub_expr: addsub_expr SUB . addsub_expr
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 122
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-
-
-状态 82
-
-   56 mdm_expr: mdm_expr MUL . mdm_expr
-
-    LP          偏移，并进入状态 123
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    mdm_expr    转到状态 124
-    unary_expr  转到状态 40
-
-
-状态 83
-
-   57 mdm_expr: mdm_expr DIV . mdm_expr
-
-    LP          偏移，并进入状态 123
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    mdm_expr    转到状态 125
-    unary_expr  转到状态 40
-
-
-状态 84
-
-   58 mdm_expr: mdm_expr MOD . mdm_expr
-
-    LP          偏移，并进入状态 123
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    mdm_expr    转到状态 126
-    unary_expr  转到状态 40
-
-
-状态 85
-
-   71 bool_expr: bool_expr AND . logic_expr
-
-    LP          偏移，并进入状态 127
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 90
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    logic_expr   转到状态 128
-
-
-状态 86
-
-   72 bool_expr: bool_expr OR . logic_expr
-
-    LP          偏移，并进入状态 127
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 90
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    logic_expr   转到状态 129
-
-
-状态 87
 
    19 decl_stmt: T IDENTIFIER .
    21 assign_stmt: IDENTIFIER . ASSIGN expr
@@ -1644,102 +1480,99 @@
    24            | IDENTIFIER . MULASSIGN expr
    25            | IDENTIFIER . DIVASSIGN expr
 
-    ASSIGN     偏移，并进入状态 59
-    ADDASSIGN  偏移，并进入状态 60
-    SUBASSIGN  偏移，并进入状态 61
-    MULASSIGN  偏移，并进入状态 62
-    DIVASSIGN  偏移，并进入状态 63
+    ASSIGN     偏移，并进入状态 49
+    ADDASSIGN  偏移，并进入状态 50
+    SUBASSIGN  偏移，并进入状态 51
+    MULASSIGN  偏移，并进入状态 52
+    DIVASSIGN  偏移，并进入状态 53
 
     $default  使用规则 19 以归约 (decl_stmt)
 
 
-状态 88
+状态 77
 
    20 decl_stmt: T assign_stmt .
 
     $default  使用规则 20 以归约 (decl_stmt)
 
 
-状态 89
+状态 78
 
-   50 addsub_expr: LP . addsub_expr RP
-   54 mdm_expr: LP . mdm_expr RP
-   59 unary_expr: LP . unary_expr RP
-   69 bool_expr: LP . bool_expr RP
-   73 logic_expr: LP . logic_expr RP
+   26 if_stmt: IF LP expr . RP statements ELSE statements
+   27        | IF LP expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    LP          偏移，并进入状态 89
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 130
-    mdm_expr     转到状态 54
-    unary_expr   转到状态 55
-    bool_expr    转到状态 131
-    logic_expr   转到状态 57
-
-
-状态 90
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   76 logic_expr: addsub_expr . LT addsub_expr
-   77           | addsub_expr . GT addsub_expr
-   78           | addsub_expr . LE addsub_expr
-   79           | addsub_expr . GE addsub_expr
-   80           | addsub_expr . EQ addsub_expr
-   81           | addsub_expr . NEQ addsub_expr
-
-    LT   偏移，并进入状态 74
-    GT   偏移，并进入状态 75
-    LE   偏移，并进入状态 76
-    GE   偏移，并进入状态 77
-    EQ   偏移，并进入状态 78
-    NEQ  偏移，并进入状态 79
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
+    RP   偏移，并进入状态 108
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 91
+状态 79
 
-   26 if_stmt: IF LP bool_expr . RP statements ELSE statements
-   27        | IF LP bool_expr . RP statements
-   71 bool_expr: bool_expr . AND logic_expr
-   72          | bool_expr . OR logic_expr
+   36 while_stmt: WHILE LP expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP   偏移，并进入状态 132
-    AND  偏移，并进入状态 85
-    OR   偏移，并进入状态 86
+    RP   偏移，并进入状态 109
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 92
-
-   36 while_stmt: WHILE LP bool_expr . RP statements
-   71 bool_expr: bool_expr . AND logic_expr
-   72          | bool_expr . OR logic_expr
-
-    RP   偏移，并进入状态 133
-    AND  偏移，并进入状态 85
-    OR   偏移，并进入状态 86
-
-
-状态 93
+状态 80
 
    29 for_stmt: FOR LP SEMICOLON . expr SEMICOLON expr RP statements
    33         | FOR LP SEMICOLON . expr SEMICOLON RP statements
    34         | FOR LP SEMICOLON . SEMICOLON expr RP statements
    35         | FOR LP SEMICOLON . SEMICOLON RP statements
 
-    SEMICOLON   偏移，并进入状态 134
+    SEMICOLON   偏移，并进入状态 110
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -1749,15 +1582,10 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 135
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 111
 
 
-状态 94
+状态 81
 
    17 decl_stmt: decl_stmt . COMMA assign_stmt
    18          | decl_stmt . COMMA IDENTIFIER
@@ -1766,132 +1594,277 @@
    31         | FOR LP decl_stmt . SEMICOLON expr SEMICOLON RP statements
    32         | FOR LP decl_stmt . SEMICOLON SEMICOLON RP statements
 
-    SEMICOLON  偏移，并进入状态 136
-    COMMA      偏移，并进入状态 73
+    SEMICOLON  偏移，并进入状态 112
+    COMMA      偏移，并进入状态 62
 
 
-状态 95
+状态 82
 
    45 io_stmt: SCANF LP STRING . COMMA expr RP
    46        | SCANF LP STRING . COMMA ADDR expr RP
 
-    COMMA  偏移，并进入状态 137
+    COMMA  偏移，并进入状态 113
 
 
-状态 96
+状态 83
 
    44 io_stmt: SCANF LP expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 138
+    RP   偏移，并进入状态 114
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 97
+状态 84
 
    42 io_stmt: PRINTF LP STRING . COMMA expr RP
    43        | PRINTF LP STRING . COMMA ADDR expr RP
 
-    COMMA  偏移，并进入状态 139
+    COMMA  偏移，并进入状态 115
 
 
-状态 98
+状态 85
 
    41 io_stmt: PRINTF LP expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 140
+    RP   偏移，并进入状态 116
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 99
+状态 86
 
    47 expr: LP expr RP .
 
     $default  使用规则 47 以归约 (expr)
 
 
-状态 100
-
-   50 addsub_expr: LP addsub_expr RP .
-
-    $default  使用规则 50 以归约 (addsub_expr)
-
-
-状态 101
-
-   54 mdm_expr: LP mdm_expr RP .
-
-    $default  使用规则 54 以归约 (mdm_expr)
-
-
-状态 102
-
-   59 unary_expr: LP unary_expr RP .
-
-    $default  使用规则 59 以归约 (unary_expr)
-
-
-状态 103
-
-   69 bool_expr: LP bool_expr RP .
-
-    $default  使用规则 69 以归约 (bool_expr)
-
-
-状态 104
-
-   73 logic_expr: LP logic_expr RP .
-
-    $default  使用规则 73 以归约 (logic_expr)
-
-
-状态 105
+状态 87
 
    16 block: LB statements RB .
 
     $default  使用规则 16 以归约 (block)
 
 
-状态 106
+状态 88
 
    21 assign_stmt: IDENTIFIER ASSIGN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
     $default  使用规则 21 以归约 (assign_stmt)
 
 
-状态 107
+状态 89
 
    22 assign_stmt: IDENTIFIER ADDASSIGN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
     $default  使用规则 22 以归约 (assign_stmt)
 
 
-状态 108
+状态 90
 
    23 assign_stmt: IDENTIFIER SUBASSIGN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
     $default  使用规则 23 以归约 (assign_stmt)
 
 
-状态 109
+状态 91
 
    24 assign_stmt: IDENTIFIER MULASSIGN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
     $default  使用规则 24 以归约 (assign_stmt)
 
 
-状态 110
+状态 92
 
    25 assign_stmt: IDENTIFIER DIVASSIGN expr .
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
     $default  使用规则 25 以归约 (assign_stmt)
 
 
-状态 111
-
-   59 unary_expr: LP unary_expr . RP
-
-    RP  偏移，并进入状态 102
-
-
-状态 112
+状态 93
 
    18 decl_stmt: decl_stmt COMMA IDENTIFIER .
    21 assign_stmt: IDENTIFIER . ASSIGN expr
@@ -1900,256 +1873,354 @@
    24            | IDENTIFIER . MULASSIGN expr
    25            | IDENTIFIER . DIVASSIGN expr
 
-    ASSIGN     偏移，并进入状态 59
-    ADDASSIGN  偏移，并进入状态 60
-    SUBASSIGN  偏移，并进入状态 61
-    MULASSIGN  偏移，并进入状态 62
-    DIVASSIGN  偏移，并进入状态 63
+    ASSIGN     偏移，并进入状态 49
+    ADDASSIGN  偏移，并进入状态 50
+    SUBASSIGN  偏移，并进入状态 51
+    MULASSIGN  偏移，并进入状态 52
+    DIVASSIGN  偏移，并进入状态 53
 
     $default  使用规则 18 以归约 (decl_stmt)
 
 
-状态 113
+状态 94
 
    17 decl_stmt: decl_stmt COMMA assign_stmt .
 
     $default  使用规则 17 以归约 (decl_stmt)
 
 
-状态 114
-
-   50 addsub_expr: LP . addsub_expr RP
-   54 mdm_expr: LP . mdm_expr RP
-   59 unary_expr: LP . unary_expr RP
-
-    LP          偏移，并进入状态 114
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 141
-    mdm_expr     转到状态 54
-    unary_expr   转到状态 55
-
-
-状态 115
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   76 logic_expr: addsub_expr LT addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 76 以归约 (logic_expr)
-
-
-状态 116
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   77 logic_expr: addsub_expr GT addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 77 以归约 (logic_expr)
-
-
-状态 117
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   78 logic_expr: addsub_expr LE addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 78 以归约 (logic_expr)
-
-
-状态 118
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   79 logic_expr: addsub_expr GE addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 79 以归约 (logic_expr)
-
-
-状态 119
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   80 logic_expr: addsub_expr EQ addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 80 以归约 (logic_expr)
-
-
-状态 120
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   81 logic_expr: addsub_expr NEQ addsub_expr .
-
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-    $default  使用规则 81 以归约 (logic_expr)
-
-
-状态 121
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   52            | addsub_expr ADD addsub_expr .
-   53            | addsub_expr . SUB addsub_expr
-
-    $default  使用规则 52 以归约 (addsub_expr)
-
-
-状态 122
-
-   52 addsub_expr: addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   53            | addsub_expr SUB addsub_expr .
-
-    $default  使用规则 53 以归约 (addsub_expr)
-
-
-状态 123
-
-   54 mdm_expr: LP . mdm_expr RP
-   59 unary_expr: LP . unary_expr RP
-
-    LP          偏移，并进入状态 123
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    mdm_expr    转到状态 142
-    unary_expr  转到状态 55
-
-
-状态 124
-
-   56 mdm_expr: mdm_expr . MUL mdm_expr
-   56         | mdm_expr MUL mdm_expr .
-   57         | mdm_expr . DIV mdm_expr
-   58         | mdm_expr . MOD mdm_expr
-
-    $default  使用规则 56 以归约 (mdm_expr)
-
-
-状态 125
-
-   56 mdm_expr: mdm_expr . MUL mdm_expr
-   57         | mdm_expr . DIV mdm_expr
-   57         | mdm_expr DIV mdm_expr .
-   58         | mdm_expr . MOD mdm_expr
-
-    $default  使用规则 57 以归约 (mdm_expr)
-
-
-状态 126
-
-   56 mdm_expr: mdm_expr . MUL mdm_expr
-   57         | mdm_expr . DIV mdm_expr
-   58         | mdm_expr . MOD mdm_expr
-   58         | mdm_expr MOD mdm_expr .
-
-    $default  使用规则 58 以归约 (mdm_expr)
-
-
-状态 127
-
-   50 addsub_expr: LP . addsub_expr RP
-   54 mdm_expr: LP . mdm_expr RP
-   59 unary_expr: LP . unary_expr RP
-   73 logic_expr: LP . logic_expr RP
-
-    LP          偏移，并进入状态 127
-    IDENTIFIER  偏移，并进入状态 47
-    INTEGER     偏移，并进入状态 17
-    CHAR        偏移，并进入状态 18
-    TRUE        偏移，并进入状态 19
-    FALSE       偏移，并进入状态 20
-    SUB         偏移，并进入状态 21
-    NOT         偏移，并进入状态 22
-    INC         偏移，并进入状态 23
-    DEC         偏移，并进入状态 24
-
-    addsub_expr  转到状态 130
-    mdm_expr     转到状态 54
-    unary_expr   转到状态 55
-    logic_expr   转到状态 143
-
-
-状态 128
-
-   71 bool_expr: bool_expr AND logic_expr .
-
-    $default  使用规则 71 以归约 (bool_expr)
-
-
-状态 129
-
-   72 bool_expr: bool_expr OR logic_expr .
-
-    $default  使用规则 72 以归约 (bool_expr)
-
-
-状态 130
-
-   50 addsub_expr: LP addsub_expr . RP
-   52            | addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-   76 logic_expr: addsub_expr . LT addsub_expr
-   77           | addsub_expr . GT addsub_expr
-   78           | addsub_expr . LE addsub_expr
-   79           | addsub_expr . GE addsub_expr
-   80           | addsub_expr . EQ addsub_expr
-   81           | addsub_expr . NEQ addsub_expr
-
-    RP   偏移，并进入状态 100
-    LT   偏移，并进入状态 74
-    GT   偏移，并进入状态 75
-    LE   偏移，并进入状态 76
-    GE   偏移，并进入状态 77
-    EQ   偏移，并进入状态 78
-    NEQ  偏移，并进入状态 79
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-
-状态 131
-
-   69 bool_expr: LP bool_expr . RP
-   71          | bool_expr . AND logic_expr
-   72          | bool_expr . OR logic_expr
-
-    RP   偏移，并进入状态 103
-    AND  偏移，并进入状态 85
-    OR   偏移，并进入状态 86
-
-
-状态 132
-
-   26 if_stmt: IF LP bool_expr RP . statements ELSE statements
-   27        | IF LP bool_expr RP . statements
+状态 95
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   58     | expr AND expr .
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 58 以归约 (expr)
+
+
+状态 96
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   59     | expr OR expr .
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 59 以归约 (expr)
+
+
+状态 97
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   61     | expr LT expr .
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 61 以归约 (expr)
+
+
+状态 98
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   62     | expr GT expr .
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 62 以归约 (expr)
+
+
+状态 99
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   63     | expr LE expr .
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 63 以归约 (expr)
+
+
+状态 100
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   64     | expr GE expr .
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 64 以归约 (expr)
+
+
+状态 101
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   65     | expr EQ expr .
+   66     | expr . NEQ expr
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 65 以归约 (expr)
+
+
+状态 102
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+   66     | expr NEQ expr .
+
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 66 以归约 (expr)
+
+
+状态 103
+
+   48 expr: expr . ADD expr
+   48     | expr ADD expr .
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 48 以归约 (expr)
+
+
+状态 104
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   49     | expr SUB expr .
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
+
+    $default  使用规则 49 以归约 (expr)
+
+
+状态 105
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   50     | expr MUL expr .
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    $default  使用规则 50 以归约 (expr)
+
+
+状态 106
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   51     | expr DIV expr .
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    $default  使用规则 51 以归约 (expr)
+
+
+状态 107
+
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   52     | expr MOD expr .
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
+
+    $default  使用规则 52 以归约 (expr)
+
+
+状态 108
+
+   26 if_stmt: IF LP expr RP . statements ELSE statements
+   27        | IF LP expr RP . statements
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
@@ -2176,7 +2247,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 144
+    statements   转到状态 117
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2188,17 +2259,12 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 133
+状态 109
 
-   36 while_stmt: WHILE LP bool_expr RP . statements
+   36 while_stmt: WHILE LP expr RP . statements
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
@@ -2225,7 +2291,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 145
+    statements   转到状态 118
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2237,22 +2303,17 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 134
+状态 110
 
    34 for_stmt: FOR LP SEMICOLON SEMICOLON . expr RP statements
    35         | FOR LP SEMICOLON SEMICOLON . RP statements
 
     LP          偏移，并进入状态 14
-    RP          偏移，并进入状态 146
-    IDENTIFIER  偏移，并进入状态 47
+    RP          偏移，并进入状态 119
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2262,32 +2323,53 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 147
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 120
 
 
-状态 135
+状态 111
 
    29 for_stmt: FOR LP SEMICOLON expr . SEMICOLON expr RP statements
    33         | FOR LP SEMICOLON expr . SEMICOLON RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    SEMICOLON  偏移，并进入状态 148
+    SEMICOLON  偏移，并进入状态 121
+    AND        偏移，并进入状态 63
+    OR         偏移，并进入状态 64
+    LT         偏移，并进入状态 65
+    GT         偏移，并进入状态 66
+    LE         偏移，并进入状态 67
+    GE         偏移，并进入状态 68
+    EQ         偏移，并进入状态 69
+    NEQ        偏移，并进入状态 70
+    ADD        偏移，并进入状态 71
+    SUB        偏移，并进入状态 72
+    MUL        偏移，并进入状态 73
+    DIV        偏移，并进入状态 74
+    MOD        偏移，并进入状态 75
 
 
-状态 136
+状态 112
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON . expr SEMICOLON expr RP statements
    30         | FOR LP decl_stmt SEMICOLON . SEMICOLON expr RP statements
    31         | FOR LP decl_stmt SEMICOLON . expr SEMICOLON RP statements
    32         | FOR LP decl_stmt SEMICOLON . SEMICOLON RP statements
 
-    SEMICOLON   偏移，并进入状态 149
+    SEMICOLON   偏移，并进入状态 122
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2297,22 +2379,17 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 150
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 123
 
 
-状态 137
+状态 113
 
    45 io_stmt: SCANF LP STRING COMMA . expr RP
    46        | SCANF LP STRING COMMA . ADDR expr RP
 
-    ADDR        偏移，并进入状态 151
+    ADDR        偏移，并进入状态 124
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2322,29 +2399,24 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 152
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 125
 
 
-状态 138
+状态 114
 
    44 io_stmt: SCANF LP expr RP .
 
     $default  使用规则 44 以归约 (io_stmt)
 
 
-状态 139
+状态 115
 
    42 io_stmt: PRINTF LP STRING COMMA . expr RP
    43        | PRINTF LP STRING COMMA . ADDR expr RP
 
-    ADDR        偏移，并进入状态 153
+    ADDR        偏移，并进入状态 126
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2354,64 +2426,28 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 154
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 127
 
 
-状态 140
+状态 116
 
    41 io_stmt: PRINTF LP expr RP .
 
     $default  使用规则 41 以归约 (io_stmt)
 
 
-状态 141
-
-   50 addsub_expr: LP addsub_expr . RP
-   52            | addsub_expr . ADD addsub_expr
-   53            | addsub_expr . SUB addsub_expr
-
-    RP   偏移，并进入状态 100
-    ADD  偏移，并进入状态 80
-    SUB  偏移，并进入状态 81
-
-
-状态 142
-
-   54 mdm_expr: LP mdm_expr . RP
-   56         | mdm_expr . MUL mdm_expr
-   57         | mdm_expr . DIV mdm_expr
-   58         | mdm_expr . MOD mdm_expr
-
-    RP   偏移，并进入状态 101
-    MUL  偏移，并进入状态 82
-    DIV  偏移，并进入状态 83
-    MOD  偏移，并进入状态 84
-
-
-状态 143
-
-   73 logic_expr: LP logic_expr . RP
-
-    RP  偏移，并进入状态 104
-
-
-状态 144
+状态 117
 
     3 statements: statements . statement
-   26 if_stmt: IF LP bool_expr RP statements . ELSE statements
-   27        | IF LP bool_expr RP statements .
+   26 if_stmt: IF LP expr RP statements . ELSE statements
+   27        | IF LP expr RP statements .
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
     T_BOOL      偏移，并进入状态 3
     SEMICOLON   偏移，并进入状态 4
     IF          偏移，并进入状态 5
-    ELSE        偏移，并进入状态 155
+    ELSE        偏移，并进入状态 128
     WHILE       偏移，并进入状态 6
     FOR         偏移，并进入状态 7
     RETURN      偏移，并进入状态 8
@@ -2457,7 +2493,7 @@
     DEC         [使用规则 27 以归约 (if_stmt)]
     $default    使用规则 27 以归约 (if_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -2468,18 +2504,13 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 145
+状态 118
 
     3 statements: statements . statement
-   36 while_stmt: WHILE LP bool_expr RP statements .
+   36 while_stmt: WHILE LP expr RP statements .
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
@@ -2530,7 +2561,7 @@
     DEC         [使用规则 36 以归约 (while_stmt)]
     $default    使用规则 36 以归约 (while_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -2541,15 +2572,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 146
+状态 119
 
    35 for_stmt: FOR LP SEMICOLON SEMICOLON RP . statements
 
@@ -2578,7 +2604,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 156
+    statements   转到状态 129
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2590,29 +2616,50 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 147
+状态 120
 
    34 for_stmt: FOR LP SEMICOLON SEMICOLON expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 157
+    RP   偏移，并进入状态 130
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 148
+状态 121
 
    29 for_stmt: FOR LP SEMICOLON expr SEMICOLON . expr RP statements
    33         | FOR LP SEMICOLON expr SEMICOLON . RP statements
 
     LP          偏移，并进入状态 14
-    RP          偏移，并进入状态 158
-    IDENTIFIER  偏移，并进入状态 47
+    RP          偏移，并进入状态 131
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2622,22 +2669,17 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 159
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 132
 
 
-状态 149
+状态 122
 
    30 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON . expr RP statements
    32         | FOR LP decl_stmt SEMICOLON SEMICOLON . RP statements
 
     LP          偏移，并进入状态 14
-    RP          偏移，并进入状态 160
-    IDENTIFIER  偏移，并进入状态 47
+    RP          偏移，并进入状态 133
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2647,28 +2689,49 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 161
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 134
 
 
-状态 150
+状态 123
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr . SEMICOLON expr RP statements
    31         | FOR LP decl_stmt SEMICOLON expr . SEMICOLON RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    SEMICOLON  偏移，并进入状态 162
+    SEMICOLON  偏移，并进入状态 135
+    AND        偏移，并进入状态 63
+    OR         偏移，并进入状态 64
+    LT         偏移，并进入状态 65
+    GT         偏移，并进入状态 66
+    LE         偏移，并进入状态 67
+    GE         偏移，并进入状态 68
+    EQ         偏移，并进入状态 69
+    NEQ        偏移，并进入状态 70
+    ADD        偏移，并进入状态 71
+    SUB        偏移，并进入状态 72
+    MUL        偏移，并进入状态 73
+    DIV        偏移，并进入状态 74
+    MOD        偏移，并进入状态 75
 
 
-状态 151
+状态 124
 
    46 io_stmt: SCANF LP STRING COMMA ADDR . expr RP
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2678,27 +2741,48 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 163
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 136
 
 
-状态 152
+状态 125
 
    45 io_stmt: SCANF LP STRING COMMA expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 164
+    RP   偏移，并进入状态 137
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 153
+状态 126
 
    43 io_stmt: PRINTF LP STRING COMMA ADDR . expr RP
 
     LP          偏移，并进入状态 14
-    IDENTIFIER  偏移，并进入状态 47
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -2708,24 +2792,45 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 165
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 138
 
 
-状态 154
+状态 127
 
    42 io_stmt: PRINTF LP STRING COMMA expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 166
+    RP   偏移，并进入状态 139
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 155
+状态 128
 
-   26 if_stmt: IF LP bool_expr RP statements ELSE . statements
+   26 if_stmt: IF LP expr RP statements ELSE . statements
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
@@ -2752,7 +2857,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 167
+    statements   转到状态 140
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2764,15 +2869,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 156
+状态 129
 
     3 statements: statements . statement
    35 for_stmt: FOR LP SEMICOLON SEMICOLON RP statements .
@@ -2826,7 +2926,7 @@
     DEC         [使用规则 35 以归约 (for_stmt)]
     $default    使用规则 35 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -2837,15 +2937,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 157
+状态 130
 
    34 for_stmt: FOR LP SEMICOLON SEMICOLON expr RP . statements
 
@@ -2874,7 +2969,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 168
+    statements   转到状态 141
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2886,15 +2981,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 158
+状态 131
 
    33 for_stmt: FOR LP SEMICOLON expr SEMICOLON RP . statements
 
@@ -2923,7 +3013,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 169
+    statements   转到状态 142
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2935,22 +3025,43 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 159
+状态 132
 
    29 for_stmt: FOR LP SEMICOLON expr SEMICOLON expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 170
+    RP   偏移，并进入状态 143
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 160
+状态 133
 
    32 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON RP . statements
 
@@ -2979,7 +3090,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 171
+    statements   转到状态 144
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -2991,29 +3102,50 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 161
+状态 134
 
    30 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 172
+    RP   偏移，并进入状态 145
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 162
+状态 135
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON . expr RP statements
    31         | FOR LP decl_stmt SEMICOLON expr SEMICOLON . RP statements
 
     LP          偏移，并进入状态 14
-    RP          偏移，并进入状态 173
-    IDENTIFIER  偏移，并进入状态 47
+    RP          偏移，并进入状态 146
+    IDENTIFIER  偏移，并进入状态 42
     INTEGER     偏移，并进入状态 17
     CHAR        偏移，并进入状态 18
     TRUE        偏移，并进入状态 19
@@ -3023,46 +3155,93 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    expr         转到状态 174
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
+    expr  转到状态 147
 
 
-状态 163
+状态 136
 
    46 io_stmt: SCANF LP STRING COMMA ADDR expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 175
+    RP   偏移，并进入状态 148
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 164
+状态 137
 
    45 io_stmt: SCANF LP STRING COMMA expr RP .
 
     $default  使用规则 45 以归约 (io_stmt)
 
 
-状态 165
+状态 138
 
    43 io_stmt: PRINTF LP STRING COMMA ADDR expr . RP
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 176
+    RP   偏移，并进入状态 149
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 166
+状态 139
 
    42 io_stmt: PRINTF LP STRING COMMA expr RP .
 
     $default  使用规则 42 以归约 (io_stmt)
 
 
-状态 167
+状态 140
 
     3 statements: statements . statement
-   26 if_stmt: IF LP bool_expr RP statements ELSE statements .
+   26 if_stmt: IF LP expr RP statements ELSE statements .
 
     T_CHAR      偏移，并进入状态 1
     T_INT       偏移，并进入状态 2
@@ -3113,7 +3292,7 @@
     DEC         [使用规则 26 以归约 (if_stmt)]
     $default    使用规则 26 以归约 (if_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3124,15 +3303,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 168
+状态 141
 
     3 statements: statements . statement
    34 for_stmt: FOR LP SEMICOLON SEMICOLON expr RP statements .
@@ -3186,7 +3360,7 @@
     DEC         [使用规则 34 以归约 (for_stmt)]
     $default    使用规则 34 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3197,15 +3371,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 169
+状态 142
 
     3 statements: statements . statement
    33 for_stmt: FOR LP SEMICOLON expr SEMICOLON RP statements .
@@ -3259,7 +3428,7 @@
     DEC         [使用规则 33 以归约 (for_stmt)]
     $default    使用规则 33 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3270,15 +3439,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 170
+状态 143
 
    29 for_stmt: FOR LP SEMICOLON expr SEMICOLON expr RP . statements
 
@@ -3307,7 +3471,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 177
+    statements   转到状态 150
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -3319,15 +3483,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 171
+状态 144
 
     3 statements: statements . statement
    32 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON RP statements .
@@ -3381,7 +3540,7 @@
     DEC         [使用规则 32 以归约 (for_stmt)]
     $default    使用规则 32 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3392,15 +3551,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 172
+状态 145
 
    30 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON expr RP . statements
 
@@ -3429,7 +3583,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 178
+    statements   转到状态 151
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -3441,15 +3595,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 173
+状态 146
 
    31 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON RP . statements
 
@@ -3478,7 +3627,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 179
+    statements   转到状态 152
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -3490,36 +3639,57 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 174
+状态 147
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON expr . RP statements
+   48 expr: expr . ADD expr
+   49     | expr . SUB expr
+   50     | expr . MUL expr
+   51     | expr . DIV expr
+   52     | expr . MOD expr
+   58     | expr . AND expr
+   59     | expr . OR expr
+   61     | expr . LT expr
+   62     | expr . GT expr
+   63     | expr . LE expr
+   64     | expr . GE expr
+   65     | expr . EQ expr
+   66     | expr . NEQ expr
 
-    RP  偏移，并进入状态 180
+    RP   偏移，并进入状态 153
+    AND  偏移，并进入状态 63
+    OR   偏移，并进入状态 64
+    LT   偏移，并进入状态 65
+    GT   偏移，并进入状态 66
+    LE   偏移，并进入状态 67
+    GE   偏移，并进入状态 68
+    EQ   偏移，并进入状态 69
+    NEQ  偏移，并进入状态 70
+    ADD  偏移，并进入状态 71
+    SUB  偏移，并进入状态 72
+    MUL  偏移，并进入状态 73
+    DIV  偏移，并进入状态 74
+    MOD  偏移，并进入状态 75
 
 
-状态 175
+状态 148
 
    46 io_stmt: SCANF LP STRING COMMA ADDR expr RP .
 
     $default  使用规则 46 以归约 (io_stmt)
 
 
-状态 176
+状态 149
 
    43 io_stmt: PRINTF LP STRING COMMA ADDR expr RP .
 
     $default  使用规则 43 以归约 (io_stmt)
 
 
-状态 177
+状态 150
 
     3 statements: statements . statement
    29 for_stmt: FOR LP SEMICOLON expr SEMICOLON expr RP statements .
@@ -3573,7 +3743,7 @@
     DEC         [使用规则 29 以归约 (for_stmt)]
     $default    使用规则 29 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3584,15 +3754,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 178
+状态 151
 
     3 statements: statements . statement
    30 for_stmt: FOR LP decl_stmt SEMICOLON SEMICOLON expr RP statements .
@@ -3646,7 +3811,7 @@
     DEC         [使用规则 30 以归约 (for_stmt)]
     $default    使用规则 30 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3657,15 +3822,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 179
+状态 152
 
     3 statements: statements . statement
    31 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON RP statements .
@@ -3719,7 +3879,7 @@
     DEC         [使用规则 31 以归约 (for_stmt)]
     $default    使用规则 31 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3730,15 +3890,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 180
+状态 153
 
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON expr RP . statements
 
@@ -3767,7 +3922,7 @@
     INC         偏移，并进入状态 23
     DEC         偏移，并进入状态 24
 
-    statements   转到状态 181
+    statements   转到状态 154
     statement    转到状态 27
     semi_stmt    转到状态 28
     block        转到状态 29
@@ -3779,15 +3934,10 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38
 
 
-状态 181
+状态 154
 
     3 statements: statements . statement
    28 for_stmt: FOR LP decl_stmt SEMICOLON expr SEMICOLON expr RP statements .
@@ -3841,7 +3991,7 @@
     DEC         [使用规则 28 以归约 (for_stmt)]
     $default    使用规则 28 以归约 (for_stmt)
 
-    statement    转到状态 72
+    statement    转到状态 61
     semi_stmt    转到状态 28
     block        转到状态 29
     decl_stmt    转到状态 30
@@ -3852,9 +4002,4 @@
     jump_stmt    转到状态 35
     io_stmt      转到状态 36
     expr         转到状态 37
-    addsub_expr  转到状态 38
-    mdm_expr     转到状态 39
-    unary_expr   转到状态 40
-    bool_expr    转到状态 41
-    logic_expr   转到状态 42
-    T            转到状态 43
+    T            转到状态 38

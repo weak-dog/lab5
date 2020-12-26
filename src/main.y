@@ -107,14 +107,14 @@ assign_stmt:
 ;
 
 if_stmt:
-  IF LP bool_expr RP statements ELSE statements {
+  IF LP expr RP statements ELSE statements {
     $$=new TreeNode($3->lineno,NODE_STMT);
     $$->sType=STMT_IFELSE;
     $$->child[0]=$3;
     $$->child[1]=$5;
     $$->child[2]=$7;
 }
-| IF LP bool_expr RP statements {
+| IF LP expr RP statements {
     $$=new TreeNode($3->lineno,NODE_STMT);
     $$->sType=STMT_IFELSE;
     $$->child[0]=$3;
@@ -202,7 +202,7 @@ for_stmt:
 ;
 
 while_stmt:
-  WHILE LP bool_expr RP statements {
+  WHILE LP expr RP statements {
     $$=new TreeNode($3->lineno,NODE_STMT);
     $$->sType=STMT_WHILE;
     $$->child[0]=$3;
@@ -254,75 +254,50 @@ io_stmt:
 }
 ;
 
-expr: 
-  LP expr RP  {$$=$2;}
-| addsub_expr {$$=$1;}
-| bool_expr   {$$=$1;}
-;
-
-addsub_expr: 
-  LP addsub_expr RP {$$=$2;}
-| mdm_expr {$$=$1;}
-| addsub_expr ADD addsub_expr {
-    $$=new TreeNode($3->lineno,NODE_EXPR);
+expr:
+  LP expr RP {$$=$2;}
+| expr ADD expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_ADD;
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr SUB addsub_expr {
-    $$=new TreeNode($3->lineno,NODE_EXPR);
+| expr SUB expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_SUB;
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-;
-
-mdm_expr:
-  LP mdm_expr RP {$$=$2;}
-| unary_expr {$$=$1;}
-| mdm_expr MUL mdm_expr {
-    $$=new TreeNode($3->lineno,NODE_EXPR);
+| expr MUL expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_MUL;
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| mdm_expr DIV mdm_expr {
-    $$=new TreeNode($3->lineno,NODE_EXPR);
+| expr DIV expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_DIV;
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| mdm_expr MOD mdm_expr {
-    $$=new TreeNode($3->lineno,NODE_EXPR);
+| expr MOD expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_MOD;
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-;
-
-unary_expr: 
-  LP unary_expr RP {$$=$2;}
-| SUB unary_expr %prec MINUS {
+| SUB expr %prec MINUS {
     $$=new TreeNode($2->lineno,NODE_EXPR);
     $$->opType=OP_MINUS;
     $$->valType=VALUE_INT;
     $$->child[0]=$2;
 }
-| IDENTIFIER {$$=$1;}
-| NOT IDENTIFIER {
-    $$=new TreeNode($1->lineno,NODE_EXPR);
-    $$->opType=OP_NOT;
-    $$->valType=VALUE_BOOL;
-    $$->child[0]=$2;
-}
-| INTEGER {$$=$1;}
-| CHAR {$$=$1;}
-| INC IDENTIFIER {
+| INC IDENTIFIER {//TODO change or not
     $$=new TreeNode($2->lineno,NODE_EXPR);
     $$->opType=OP_INC;
     $$->valType=VALUE_INT;
@@ -346,73 +321,73 @@ unary_expr:
     $$->valType=VALUE_INT;
     $$->child[0]=$1;
 }
-;
-
-bool_expr:
-  LP bool_expr RP {$$=$2;}
-| logic_expr {$$=$1;}
-| bool_expr AND logic_expr {
+| expr AND expr {
     $$=new TreeNode($3->lineno,NODE_EXPR);
     $$->opType=OP_AND;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| bool_expr OR logic_expr {
+| expr OR expr {
     $$=new TreeNode($3->lineno,NODE_EXPR);
     $$->opType=OP_OR;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-;
-
-logic_expr:
-  LP logic_expr RP {$$=$2;} 
-| TRUE  {$$=$1;}
-| FALSE {$$=$1;}
-| addsub_expr LT addsub_expr {
+| NOT expr {
+    $$=new TreeNode($1->lineno,NODE_EXPR);
+    $$->opType=OP_NOT;
+    $$->valType=VALUE_BOOL;
+    $$->child[0]=$2;
+}
+| expr LT expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_LT;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr GT addsub_expr {
+| expr GT expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_GT;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr LE addsub_expr {
+| expr LE expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_LE;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr GE addsub_expr {
+| expr GE expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_GE;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr EQ addsub_expr {
+| expr EQ expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_EQ;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
-| addsub_expr NEQ addsub_expr {
+| expr NEQ expr {
     $$=new TreeNode($1->lineno,NODE_EXPR);
     $$->opType=OP_NEQ;
     $$->valType=VALUE_BOOL;
     $$->child[0]=$1;
     $$->child[1]=$3;
 }
+| TRUE  {$$=$1;}
+| FALSE {$$=$1;}
+| IDENTIFIER {$$=$1;}
+| CHAR {$$=$1;}
+| INTEGER {$$=$1;}
 ;
 
 T: 
