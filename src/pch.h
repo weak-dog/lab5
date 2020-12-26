@@ -9,12 +9,11 @@
 #include <cstdarg>
 #include <cstdlib>
 #include <iostream>
-#include <iomanip>
+#include<iomanip>
 #include <fstream>
 #include <string>
 #include <list>
 #include <assert.h>
-
 #include <map>
 #include <stack>
 #include <unordered_map>

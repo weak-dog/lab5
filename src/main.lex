@@ -25,11 +25,11 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 {LINECOMMENT} {++lineno;} 
 
 "&"   return ADDR;
-"int"   {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->type=TYPE_INT; yylval=node;return T_INT;}
-"bool"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->type=TYPE_BOOL;yylval=node;return T_BOOL;}
-"char"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->type=TYPE_CHAR;yylval=node;return T_CHAR;}
-"TRUE"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->b_val=true; node->type->type=VALUE_BOOL;yylval=node;return TRUE;}
-"FALSE" {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->b_val=false;node->type->type=VALUE_BOOL;yylval=node;return FALSE;}
+"int"   {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->valType=VALUE_INT; yylval=node;return T_INT;}
+"bool"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->valType=VALUE_BOOL;yylval=node;return T_BOOL;}
+"char"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->valType=VALUE_CHAR;yylval=node;return T_CHAR;}
+"TRUE"  {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->valType=VALUE_BOOL;yylval=node;return TRUE;}
+"FALSE" {TreeNode* node=new TreeNode(lineno,NODE_CONST);node->valType=VALUE_BOOL;yylval=node;return FALSE;}
 "+"   return ADD;
 "-"   return SUB;
 "*"   return MUL;
@@ -48,10 +48,10 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 "||" return OR;
 "!"  return NOT;
 
-"("  return LBRACKET;
-")"  return RBRACKET;
-"{"  return LBRACE;
-"}"  return RBRACE;
+"("  return LP;
+")"  return RP;
+"{"  return LB;
+"}"  return RB;
 "="  return ASSIGN;
 "+=" return ADDASSIGN;
 "-=" return SUBASSIGN;
@@ -61,8 +61,9 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 ","  return COMMA;
 
 "return" return RETURN;
-"continue" {TreeNode* node=new TreeNode(lineno,NODE_STMT);node->stype=STMT_CONTINUE;yylval=node;return CONTINUE;}
-"break"    {TreeNode* node=new TreeNode(lineno,NODE_STMT);node->stype=STMT_BREAK;yylval=node;return BREAK;}
+"continue" {TreeNode* node=new TreeNode(lineno,NODE_STMT);node->sType=STMT_CONTINUE;yylval=node;return CONTINUE;}
+"break"    {TreeNode* node=new TreeNode(lineno,NODE_STMT);node->sType=STMT_BREAK;yylval=node;return BREAK;}
+"return"   {TreeNode* node=new TreeNode(lineno,NODE_STMT);node->sType=STMT_RETURN;yylval=node;return RETURN;}
 "for"    return FOR;
 "while"  return WHILE;
 "if"     return IF;
@@ -72,38 +73,36 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 
 "void main()" {
     TreeNode* node=new TreeNode(lineno,NODE_STMT);
-    node->stype=STMT_MAIN;
+    node->sType=STMT_MAIN;
     yylval=node;
     return MAIN;
 }
 
 {INTEGER} {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
-    node->type = TYPE_INT;
-    node->int_val = atoi(yytext);
+    node->valType = VALUE_INT;
     yylval = node;
     return INTEGER;
 }
 
 {CHAR} {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
-    node->type = TYPE_CHAR;
-    node->ch_val = yytext[1];
+    node->valType = VALUE_CHAR;
     yylval = node;
     return CHAR;
 }
 
 {STRING} {
     TreeNode* node=new TreeNode(lineno,NODE_CONST);
-    node->type = TYPE_STRING;
-    node->str_val = string(yytext);
+    node->valType = VALUE_STRING;
+;
     yylval=node;
     return STRING;
 }
 
 {IDENTIFIER} {
     TreeNode* node = new TreeNode(lineno, NODE_VAR);
-    node->var_name = string(yytext);
+    node->varName = string(yytext);
     yylval = node;
     return IDENTIFIER;
 }

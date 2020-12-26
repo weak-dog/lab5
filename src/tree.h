@@ -1,46 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
-
+#define MAX_CHILD 4
 #include "pch.h"
-#include "type.h"
-
-struct TreeNode {
-public:
-    //节点基本信息
-    int nodeID;         // 节点编号
-    int lineno;         // 节点行号
-    int nodeType;  // 节点类型
-    TreeNode* child = nullptr; 
-    TreeNode* sibling = nullptr;
-
-    int optype; //表达式类型
-    int stype;      //语句类型
-
-    Type* type;          //变量、常量、类型需要用到这个属性
-
-    //标识符相关属性
-    string var_name;//标识符的名字
-    int int_val;    //int型标识符的值
-    char ch_val;    //char型标识符的值
-    bool b_val;     //bool型标识符的值
-    string str_val; //string型标识符的值
-
-    TreeNode(int lineno, int type);//构造函数
-    void addChild(TreeNode*);
-    void addSibling(TreeNode*);
-    
-    void printAST();        //递归打印AST，输出自己信息+孩子id，之后递归打印孩子和兄弟。
-    void printNodeInfo();   //打印节点信息
-    void printChildrenId(); //打印孩子节点的序号
-    void printSpecialInfo();//打印节点特殊信息
-
-    void genNodeId();       //给节点编号
-
-    static string nodeType2String (int type);
-    static string opType2String (int type);
-    static string sType2String (int type);
-    
-};
+using namespace std;
 
 //节点类型
 enum NodeType
@@ -51,6 +13,18 @@ enum NodeType
     NODE_CONST, //常量
     NODE_VAR,   //变量
     NODE_TYPE,  //变量类
+    NODE_NULL,  //空
+};
+
+enum ValueType
+{
+    VALUE_BOOL,     //布尔类型
+    VALUE_INT,      //整型
+    VALUE_CHAR,     //字符型
+    VALUE_STRING,   //字符串型
+    COMPOSE_STRUCT, 
+    COMPOSE_UNION,
+    COMPOSE_FUNCTION
 };
 
 //表达式节点子类型
@@ -77,8 +51,8 @@ enum OperatorType
 };
 
 //语句节点子类型
-enum StmtType {
-    STMT_SKIP,
+enum StmtType 
+{
     STMT_DECL,      //声明语句
     STMT_ASSIGN,    //赋值语句
     STMT_RETURN,    //返回语句
@@ -92,4 +66,58 @@ enum StmtType {
     STMT_PRINTF,    //输出语句
     STMT_BLOCK,     //代码块  
 };
+
+struct Label {
+	string true_label;
+	string false_label;
+	string begin_label;
+	string next_label;
+};
+
+class TreeNode {
+public:
+    int nodeID;                     //结点编号
+    int lineno;                     //结点行号
+    int nodeType;                   //结点类型
+    int valType;                    //节点值的类型
+    int sType;                      //语句结点类型
+    int opType;                     //表达式运算符类型
+    string varName;                    //TODO
+    TreeNode* child[MAX_CHILD];        //孩子结点
+    TreeNode* sibling;      //兄弟结点
+    Label lable;                    //标签
+public:
+    TreeNode(int lineno, int type); //构造函数         
+    void addSibling(TreeNode*);     //添加兄弟结点
+    void genNodeId();               //递归给结点编号
+    void printAST();                //递归打印AST，输出自己信息+孩子id，之后递归打印孩子和兄弟。
+    void printNodeInfo();           //打印结点信息
+    void printChildrenId();         //打印孩子结点的序号
+    void printSpecialInfo();        //打印结点特殊信息
+    static string nodeType2String (int type);
+    static string opType2String (int type);
+    static string sType2String (int type);
+    static string getTypeInfo(int type);
+};
+
+class tree{
+public:
+    TreeNode* root;                                 //根节点
+    int label_seq=0;                                //下一个生成标签的序号
+public:
+    void get_label();                               //生成标签
+    void gen_code(ostream $out);                    //生成汇编代码
+    void type_check(TreeNode *t);                       //类型检查
+	void get_temp_var(TreeNode *t);                     //TODO
+	string new_label(void);                         //新建一个标签
+	void recursive_get_label(TreeNode *t);              //递归获取标签
+	void stmt_get_label(TreeNode *t);                   //语句生成标签
+	void expr_get_label(TreeNode *t);                   //表达式生成标签
+	void gen_header(ostream &out);                  //生成汇编语言头部
+	void gen_decl(ostream &out, TreeNode *t);           //全局变量生成代码
+	void recursive_gen_code(ostream &out, TreeNode *t); //递归生成汇编代码
+	void stmt_gen_code(ostream &out, TreeNode *t);      //语句生成汇编代码
+	void expr_gen_code(ostream &out, TreeNode *t);      //表达式生成汇编代码
+};
+
 #endif

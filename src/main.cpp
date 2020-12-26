@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
     yyparse();
     if(root != NULL) {
         root->genNodeId();
+        //TODO 建立符号表
         root->printAST();
+        //TODO 打印符号表
     }
     return 0;
 }
